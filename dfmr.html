@@ -4,7 +4,7 @@
 <style>
 #structure {
 		width:100%;
-		height:680px;
+		height:580px;
 	}
 	
 .container-fluid {
@@ -18,14 +18,13 @@
 	<h1> CSO DFMR </h1>
 	
 	
-	<div class="row" height=500px>
+	<div class="row">
 		<div class="col-sm-6">
 
 			<div class="row">
 				<div class="col-sm-3 text-right"><b>Tilt angle:</b></div> 
 				<div class="col-sm-9"> <rzslider rz-slider-model="tilt" rz-slider-options="{ceil:90}"></rzslider> </div>
 			</div>	
-			
 			
 			<div class="row">
 				<div class="col-sm-3 text-right"><b>Zeeman angle:</b></div> 
@@ -36,58 +35,32 @@
 				<div class="col-sm-3 text-right"><b> Conical periods:</b></div> 
 				<div class="col-sm-9"> <rzslider rz-slider-model="conicalPeriods" rz-slider-options="{ceil:8, floor:-8}"></rzslider> </div>
 			</div>
-			
-			
-			
+		
 			<div class="row">
 				<div class="col-sm-3 text-right"><b> Phase periods:</b></div> 
 				<div class="col-sm-9"> <rzslider rz-slider-model="phasePeriods" rz-slider-options="{ceil:8, floor:-8}"></rzslider> </div>
 			</div>
-			
-			
-			
+		
 			<div class="row">
 				<div class="col-sm-3 text-right"><b> Cone angle:</b></div> 
 				<div class="col-sm-9"> <rzslider rz-slider-model="hall" rz-slider-options="{ceil:90}"></rzslider> </div>
 			</div>
 			
+
+
+
+
 			<div class="row">
 				<div class="col-sm-3 text-right"><b> th:</b></div> 
-				<div class="col-sm-9"> <rzslider rz-slider-model="th" rz-slider-options="{ceil:90}"></rzslider> </div>
+				<div class="col-sm-9"> <rzslider rz-slider-model="dfmrOptions.th" rz-slider-options="{ceil:90}"></rzslider> </div>
 			</div>
 			<div class="row">
 				<div class="col-sm-3 text-right"><b> tth:</b></div> 
-				<div class="col-sm-9"> <rzslider rz-slider-model="tth" rz-slider-options="{ceil:90}"></rzslider> </div>
+				<div class="col-sm-9"> <rzslider rz-slider-model="dfmrOptions.tth" rz-slider-options="{ceil:90}"></rzslider> </div>
 			</div>
-			
-			<div class="row">
-				<div class="col-sm-3 text-right"><b> idx:</b></div> 
-				<div class="col-sm-9"> <rzslider rz-slider-model="idx" rz-slider-options="{ceil:16}"></rzslider> </div>
-			</div>
-			
-			
-			
+						
 
-			
-			<div class="row">
-				<div class="col-sm-12"><h2> Intensity </h2> </div> 
-				<div colormap x="delay" y="laa" model="laaDelayGrid"> </div>
-			</div>
-			
-			<div class="row">
-				<div class="col-sm-12"><h2> FFT </h2> </div> 
-				<div graph-plot model="fftStructure[(timeStep/10 | number : 0) % 36 ][0]"> </div>
-				<br>
-				<div graph-plot model="fftStructure[(timeStep/10 | number : 0) % 36][1]"> </div>
-				<br>
-				<div graph-plot model="fftStructure[(timeStep/10 | number : 0) % 36][2]"> </div>
-			</div>
-			
-			
-		</div>
-	
 
-		<div class="col-sm-6">
 			<div class="row">
 				<div class="col-sm-3 text-right"><b> Speed:</b></div> 
 				<div class="col-sm-9"> <rzslider rz-slider-model="speed" rz-slider-options="{ceil:10}"></rzslider> </div>
@@ -98,12 +71,46 @@
 				<div class="col-sm-9"> <rzslider rz-slider-model="timeStep" rz-slider-options="{ceil:360}"></rzslider> </div>
 			</div>
 			
+
+			<!--
+			<div class="row">
+				<div class="col-sm-12"><h2> FFT </h2> </div> 
+				<div graph-plot model="fftStructure[(timeStep/10 | number : 0) % 36 ][0]"> </div>
+				<br>
+				<div graph-plot model="fftStructure[(timeStep/10 | number : 0) % 36][1]"> </div>
+				<br>
+				<div graph-plot model="fftStructure[(timeStep/10 | number : 0) % 36][2]"> </div>
+			</div>
+			-->
+			
+			
+		</div>
+	
+
+		<div class="col-sm-6">
 			<div class="row">
 				<div class="col-sm-12">
 					<div id="structure" class="border"></div>		
 				</div>
 			</div>
 		</div>		
+
+	</div>
+
+
+	<div class="row">
+		<div class="col-sm-4">
+			<h2> Qh1 </h2> 
+			<div colormap delay="delay" model="fftStructure" options="dfmrOptions" idx=6> </div>
+		</div>
+		<div class="col-sm-4">
+			<h2> [001] </h2> 
+			<div colormap delay="delay" model="fftStructure" options="dfmrOptions" idx=8> </div>
+		</div>
+		<div class="col-sm-4">
+			<h2> Qh2 </h2> 
+			<div colormap delay="delay" model="fftStructure" options="dfmrOptions" idx=10> </div>
+		</div>
 	</div>
 			
 
@@ -160,21 +167,14 @@ app.controller('mainController', function($scope) {
 	$scope.hall = 10;
 
 	// dfmr params
-	$scope.th = 10;
-	$scope.tth = 20;
-	$scope.ki = new THREE.Vector3(Math.cos($scope.th* Math.PI / 180) , 0, Math.sin($scope.th* Math.PI / 180));
-	$scope.ks = new THREE.Vector3(Math.cos($scope.tth* Math.PI / 180) , 0,-Math.sin($scope.tth* Math.PI / 180));
-	$scope.P = PS([0])[0];
-	
-	$scope.idx = 10;
-	$scope.laa = [0,15,30,45,60,75,90,105,120,135,150,165];
-	$scope.delay = []; //[0,15,30,45,60,75,90,105,120,135,150,165,180,195,210,225,240,255,270,285,300,315,330,345];
+	$scope.dfmrOptions = {};
+	$scope.dfmrOptions['th'] = 10;
+	$scope.dfmrOptions['tth'] = 20;
 
+	$scope.delay = [];
 	for (i = 0; i < 360; i=i+10) {
 		$scope.delay.push(i);
 	} 
-
-	$scope.laaDelayGrid = [];
 
 	$scope.spinStructure =  [];
 	$scope.fftStructure = [];
@@ -182,56 +182,32 @@ app.controller('mainController', function($scope) {
 	$scope.$watch('tilt', function (newVal) {
 		drawCircles();
 		processStructure();
-		$scope.laaDelayGrid = calculateLaaDelay($scope.laa, $scope.delay, $scope.idx);
     }, true);
 	
 	$scope.$watch('zeeman', function (newVal) {
 		drawCircles();
 		processStructure();
-		$scope.laaDelayGrid = calculateLaaDelay($scope.laa, $scope.delay, $scope.idx);
     }, true);
 	
 	$scope.$watch('hall', function (newVal) {
 		drawCircles();
 		processStructure();
-		$scope.laaDelayGrid = calculateLaaDelay($scope.laa, $scope.delay, $scope.idx);
     }, true);
 	
 	$scope.$watch('conicalPeriods', function (newVal) {
 		drawCircles();
 		processStructure();
-		$scope.laaDelayGrid = calculateLaaDelay($scope.laa, $scope.delay, $scope.idx);
     }, true);
 	
 	$scope.$watch('phasePeriods', function (newVal) {
 		processStructure();
-		$scope.laaDelayGrid = calculateLaaDelay($scope.laa, $scope.delay, $scope.idx);
-    }, true);
-	
-	
-
-
-
-	$scope.$watch('th', function (newVal) {
-		$scope.ki = new THREE.Vector3(Math.cos($scope.th* Math.PI / 180) , 0, Math.sin($scope.th* Math.PI / 180));
-		$scope.ks = new THREE.Vector3(Math.cos($scope.tth* Math.PI / 180) , 0,-Math.sin($scope.tth* Math.PI / 180));
-		$scope.laaDelayGrid = calculateLaaDelay($scope.laa, $scope.delay, $scope.idx);
-    }, true);
-	
-	$scope.$watch('tth', function (newVal) {
-		$scope.ki = new THREE.Vector3(Math.cos($scope.th* Math.PI / 180) , 0, Math.sin($scope.th* Math.PI / 180));
-		$scope.ks = new THREE.Vector3(Math.cos($scope.tth* Math.PI / 180) , 0,-Math.sin($scope.tth* Math.PI / 180));
-		$scope.laaDelayGrid = calculateLaaDelay($scope.laa, $scope.delay, $scope.idx);
-    }, true);
-	
-	$scope.$watch('idx', function (newVal) {
-		$scope.laaDelayGrid = calculateLaaDelay($scope.laa, $scope.delay, $scope.idx);
 	}, true);
-	
+		
 
-
-	
-	
+	$scope.$watch('dfmrOptions.th', function (newVal) {
+		$scope.dfmrOptions.tth = $scope.dfmrOptions.th;
+	}, true);
+		
 	
 	var tick = function() {
 		$scope.timeStep = ($scope.timeStep + $scope.speed) % 360;
@@ -245,10 +221,9 @@ app.controller('mainController', function($scope) {
 		$scope.$applyAsync();
 	}
 
-	setInterval(tick, 50);
+	setInterval(tick, 100);
 	
 
-	
 	
 	//if ( ! Detector.webgl ) Detector.addGetWebGLMessage();
 	var container;
@@ -286,8 +261,6 @@ app.controller('mainController', function($scope) {
 		drawArrows();
 		drawCircles();
 		
-		//$scope.spinStructure =  structure($scope.timeStep);
-		//$scope.fftStructure = fftStructure($scope.spinStructure);
 		processStructure();
 		showStructure(arrows, $scope.spinStructure[0]);
 		
@@ -311,16 +284,12 @@ app.controller('mainController', function($scope) {
 		scene.add(arrow);
 	}
 	
-
-	
 	function processStructure() {
 		for (i = 0; i < $scope.delay.length; i++) { 
 			$scope.spinStructure[i] =  structure(i*10);
 			$scope.fftStructure[i] = fftStructure($scope.spinStructure[i]);
 		}
-	}
-
-	
+	}	
 	
 	function structure(timeStep){
 		vectors = Array();
@@ -345,12 +314,10 @@ app.controller('mainController', function($scope) {
 			
 			v0.applyAxisAngle( new THREE.Vector3( 0, 1, 0 ), ($scope.tilt * Math.PI / 180));				// rotate about x by tilt angle
 			
-			
 			vectors = vectors.concat(v0);
 		}}}
 		return vectors
 	}
-	
 	
 	function fftStructure(vectors){
 		var mag_u = vectors.map(function(m){ return m.x });
@@ -440,21 +407,15 @@ app.controller('mainController', function($scope) {
 		for (y = 0; y < $scope.gridSize[1]; y++) { 
 		for (x = 0; x < $scope.gridSize[0]; x++) { 
 			var arrow = new THREE.ArrowHelper(new THREE.Vector3(0,0,0), new THREE.Vector3( x,y,z ), 1, 0xffffff, 0.5, 0.4);
+			arrow.setColor(new THREE.Color( 0x000000 ));
 			arrows.add(arrow);
 		}}}
-		
 		arrows.applyMatrix(translateToCenter); // move to rotation center
 		scene.add(arrows);
 	}
 
 	function showStructure(object, omf) {
 		for (i = 0; i < arrows.children.length; i++ ) { 
-			var color = new THREE.Color( 0x000000 );
-			//var xy = new THREE.Vector2(omf[i*3],omf[i*3+1]);
-			//var hue = Math.atan2(xy.y, xy.x)/(2*Math.PI);
-			//color.setHSL(hue,1,0.5);
-			
-			arrows.children[i].setColor(color);
 			arrows.children[i].setDirection(omf[i]);
 		}
 	}
@@ -488,90 +449,7 @@ app.controller('mainController', function($scope) {
 	//	controls.update();
 	//	renderer.render( scene, camera );
 	//}
-	
-	
-	
-	function PS(laa) {
-		//""" 
-		//Poincare-Stokes representation of polarisation 
-		//based on arbitary linear polarisation angle laa
-		//https://en.wikipedia.org/wiki/Stokes_parameters
-		//"""
-		
-		var chi = 0;
-		var I = 1;
-		var Ip = 1;
-		
-		var out = [];
-		for (var i = 0; i < laa.length; i++) {
-			var s0 = I; 
-			var s1 = Ip * Math.cos(2*laa[i] * Math.PI/180 )* Math.cos(2*chi);
-			var s2 = Ip * Math.sin(2*laa[i] * Math.PI/180) * Math.cos(2*chi);
-			var s3 = Ip * Math.sin(2*chi);
-			out[i] = [s0, s1, s2, s3];
-		}
-		return out;
-	}
-	
 
-	
-	function calculateLaaDelay(laa, delay, idx){
-		var P = PS(laa);
-		
-		var laaDelayGrid = [];
-		for (var j=0; j < delay.length; j++) {
-			laaDelayGrid[j] = [];
-			
-			//var spinStructure =  structure(delay[j]);
-			//var myfftStructure = fftStructure(spinStructure);
-		
-			for (var i=0; i < P.length; i++) {
-				laaDelayGrid[j][i] = intensity(P[i], $scope.fftStructure[j], idx);
-			}
-		}
-		
-		// differentiate grid along delay 
-		var laaDelayGridDiff = [];
-		for (var j=0; j < delay.length; j++) {
-			laaDelayGridDiff[j] = [];
-			for (var i=0; i < P.length; i++) {
-				if (j==0) {
-					laaDelayGridDiff[j][i] = 0;
-				} else {
-					laaDelayGridDiff[j][i] = laaDelayGrid[j][i]  - laaDelayGrid[j-1][i];
-				}
-			}
-		}
-		
-		return laaDelayGridDiff;
-	}
-	
-	
-
-	
-	function intensity(P, fftStructure, idx){ //mag, P,ki,ks
-		//"""
-		//Scattered intensity from an input polarisation P and incident vector ki and output vector ks
-		//From equation A6 in Zhang_PRB_2017
-		//"""
-		var F = 1;
-
-		var MQ = new THREE.Vector3(fftStructure[0][idx], fftStructure[1][idx], fftStructure[2][idx]);		
-		var MQconj = new THREE.Vector3(conjugate(fftStructure[0][idx]), conjugate(fftStructure[1][idx]), conjugate(fftStructure[2][idx]));
-		
-		out =       0.5*F**2 * (P[0] + P[1]) *  abs( dot($scope.ks, MQ) )**2;   
-		out = out + 0.5*F**2 * (P[0] - P[1]) * (abs( dot($scope.ki, MQ) )**2  + abs( dot( $scope.ks.cross($scope.ki)  , MQ))**2);
-		a = new Complex(P[2], P[3]);
-		a = a.mul(dot( $scope.ks, MQconj ), a);
-		a = a.mul( dot( $scope.ks.cross($scope.ki) , MQ), a);
-		out = out -     F**2 * a['re'] ; 
-		
-		return out;
-	}
-	
-	
-	
-	
 	
 });
 </script>

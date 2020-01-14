@@ -1,25 +1,134 @@
 app.directive('colormap', ['$window', function ($window) {
     function linkFunc(scope, element, attrs) {
 
+		//scope.idx = 10;
+		scope.laa = [0,15,30,45,60,75,90,105,120,135,150,165];
+
         scope.$watch('model', function (newVal) {
-			
+			refreshDFMR();
+		}, true);
+
+        scope.$watch('options', function (newVal) {
+			refreshDFMR();
+		}, true);
+
+
+		function refreshDFMR() {
+			//console.log("refresh DFMR")
+			scope.ki = new THREE.Vector3(Math.cos(scope.options.th* Math.PI / 180) , 0, Math.sin(scope.options.th* Math.PI / 180));
+			scope.ks = new THREE.Vector3(Math.cos(scope.options.tth* Math.PI / 180) , 0,-Math.sin(scope.options.tth* Math.PI / 180));
+
+			var laaDelayGrid = calculateLaaDelay(scope.laa, scope.delay, scope.idx);
+
 			var data = [];
-			for (var j=0; j < scope.model.length; j++) {
-				for (var i=0; i < scope.model[j].length; i++) {
-					data.push({x:scope.x[j], y:scope.y[i], value:scope.model[j][i]});
+			for (var j=0; j < laaDelayGrid.length; j++) {
+				for (var i=0; i < laaDelayGrid[j].length; i++) {
+					data.push({x:scope.delay[j], y:scope.laa[i], value:laaDelayGrid[j][i]});
 				}
 			}
 		
 			element.html("");
 			new ColormapPlot( element[0], data);
-		}, true);
-    }
+		}
+
+
+
+
+
+	
+	
+
+
+
+
+		function PS(laa) {
+			//""" 
+			//Poincare-Stokes representation of polarisation 
+			//based on arbitary linear polarisation angle laa
+			//https://en.wikipedia.org/wiki/Stokes_parameters
+			//"""
+			
+			var chi = 0;
+			var I = 1;
+			var Ip = 1;
+			
+			var out = [];
+			for (var i = 0; i < laa.length; i++) {
+				var s0 = I; 
+				var s1 = Ip * Math.cos(2*laa[i] * Math.PI/180) * Math.cos(2*chi);
+				var s2 = Ip * Math.sin(2*laa[i] * Math.PI/180) * Math.cos(2*chi);
+				var s3 = Ip * Math.sin(2*chi);
+				out[i] = [s0, s1, s2, s3];
+			}
+			return out;
+		}
+		
+
+		
+		function calculateLaaDelay(laa, delay, idx){
+			var P = PS(laa);
+			
+			var laaDelayGrid = [];
+			for (var j=0; j < delay.length; j++) {
+				laaDelayGrid[j] = [];
+				for (var i=0; i < P.length; i++) {
+					laaDelayGrid[j][i] = intensity(P[i], scope.model[j], idx);
+				}
+			}
+			
+			// differentiate grid along delay 
+			var laaDelayGridDiff = [];
+			for (var j=0; j < delay.length; j++) {
+				laaDelayGridDiff[j] = [];
+				for (var i=0; i < P.length; i++) {
+					if (j==0) {
+						laaDelayGridDiff[j][i] = 0;
+					} else {
+						laaDelayGridDiff[j][i] = laaDelayGrid[j][i]  - laaDelayGrid[j-1][i];
+					}
+				}
+			}
+			
+			return laaDelayGridDiff;
+			//return laaDelayGrid;
+		}
+		
+		
+
+		
+		function intensity(P, fftStructure, idx){ //mag, P,ki,ks
+			//"""
+			//Scattered intensity from an input polarisation P and incident vector ki and output vector ks
+			//From equation A6 in Zhang_PRB_2017
+			//"""
+			var F = 1;
+
+			var MQ = new THREE.Vector3(fftStructure[0][idx], fftStructure[1][idx], fftStructure[2][idx]);		
+			var MQconj = new THREE.Vector3(conjugate(fftStructure[0][idx]), conjugate(fftStructure[1][idx]), conjugate(fftStructure[2][idx]));
+			
+			out =       0.5*F**2 * (P[0] + P[1]) *  abs( dot(scope.ks, MQ) )**2;   
+			out = out + 0.5*F**2 * (P[0] - P[1]) * (abs( dot(scope.ki, MQ) )**2  + abs( dot( scope.ks.cross(scope.ki)  , MQ))**2);
+			a = new Complex(P[2], P[3]);
+			a = a.mul(dot( scope.ks, MQconj ), a);
+			a = a.mul( dot( scope.ks.cross(scope.ki) , MQ), a);
+			out = out -     F**2 * a['re'] ; 
+			
+			return out;
+		}
+
+
+	}
+
 
     return {
-		scope: {'model': '=', 'x':'=', 'y':'='},
+		scope: {'model':'=', 'delay':'=', 'options':'=', 'idx':'='},
         link: linkFunc
     };
 }]);
+
+
+
+
 
 
 
