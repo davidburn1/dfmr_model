@@ -52,10 +52,6 @@
 			</div>
 			
 			<div class="row">
-				<div class="col-sm-6 text-right"><b> k:</b></div> 
-				<div class="col-sm-6"> <input class="form-control" type="number" min=0 max=1 ng-model="k"> </div>
-			</div>
-			<div class="row">
 				<div class="col-sm-3 text-right"><b> th:</b></div> 
 				<div class="col-sm-9"> <rzslider rz-slider-model="th" rz-slider-options="{ceil:90}"></rzslider> </div>
 			</div>
@@ -80,11 +76,11 @@
 			
 			<div class="row">
 				<div class="col-sm-12"><h2> FFT </h2> </div> 
-				<div graph-plot model="fftStructure[0]"> </div>
+				<div graph-plot model="fftStructure[(timeStep/10 | number : 0) % 36 ][0]"> </div>
 				<br>
-				<div graph-plot model="fftStructure[1]"> </div>
+				<div graph-plot model="fftStructure[(timeStep/10 | number : 0) % 36][1]"> </div>
 				<br>
-				<div graph-plot model="fftStructure[2]"> </div>
+				<div graph-plot model="fftStructure[(timeStep/10 | number : 0) % 36][2]"> </div>
 			</div>
 			
 			
@@ -129,11 +125,6 @@
 
 
 
-
-
-
-
-
 <script src="https://d3js.org/d3.v5.min.js"></script>
 
 <script src='./three.min.js'></script>
@@ -157,109 +148,101 @@ var app = angular.module('myApp', ['rzSlider']);
 app.controller('mainController', function($scope) {
 	$scope.timeStep = 0;
 	$scope.speed = 4;
-	
-	$scope.tilt = 0;
-	$scope.zeeman = 0;
-	
-	
-	$scope.conicalPeriods = 2; // in z direction
-	$scope.phasePeriods = 0;
-	
-	//$scope.conicalDirection = 
-	
-	
-	$scope.hall = 10;
-	
 
 	$scope.gridSize = [16,1,1];
 	$scope.circlesGridSize = [16,1,1];
 	
+	// spin structure params
+	$scope.tilt = 90;
+	$scope.zeeman = 0;
+	$scope.conicalPeriods = 2; // in z direction
+	$scope.phasePeriods = 0;
+	$scope.hall = 10;
+
+	// dfmr params
 	$scope.th = 10;
 	$scope.tth = 20;
-	$scope.k = 1;
-	$scope.ki = new THREE.Vector3($scope.k*Math.cos($scope.th* Math.PI / 180) , 0, $scope.k*Math.sin($scope.th* Math.PI / 180));
-	$scope.ks = new THREE.Vector3($scope.k*Math.cos($scope.tth* Math.PI / 180) , 0,-$scope.k*Math.sin($scope.tth* Math.PI / 180));
-	
+	$scope.ki = new THREE.Vector3(Math.cos($scope.th* Math.PI / 180) , 0, Math.sin($scope.th* Math.PI / 180));
+	$scope.ks = new THREE.Vector3(Math.cos($scope.tth* Math.PI / 180) , 0,-Math.sin($scope.tth* Math.PI / 180));
 	$scope.P = PS([0])[0];
 	
 	$scope.idx = 10;
-	$scope.laa = [0,15,30,45,60,75,90,105,120,135,150,165,180];
-	$scope.delay = [0,15,30,45,60,75,90,105,120,135,150,165,180,195,210,225,240,255,270,285,300,315,330,345,360];
+	$scope.laa = [0,15,30,45,60,75,90,105,120,135,150,165];
+	$scope.delay = []; //[0,15,30,45,60,75,90,105,120,135,150,165,180,195,210,225,240,255,270,285,300,315,330,345];
+
+	for (i = 0; i < 360; i=i+10) {
+		$scope.delay.push(i);
+	} 
+
 	$scope.laaDelayGrid = [];
 
-	
 	$scope.spinStructure =  [];
 	$scope.fftStructure = [];
 
 	$scope.$watch('tilt', function (newVal) {
 		drawCircles();
+		processStructure();
 		$scope.laaDelayGrid = calculateLaaDelay($scope.laa, $scope.delay, $scope.idx);
     }, true);
 	
 	$scope.$watch('zeeman', function (newVal) {
 		drawCircles();
+		processStructure();
 		$scope.laaDelayGrid = calculateLaaDelay($scope.laa, $scope.delay, $scope.idx);
     }, true);
 	
 	$scope.$watch('hall', function (newVal) {
 		drawCircles();
+		processStructure();
 		$scope.laaDelayGrid = calculateLaaDelay($scope.laa, $scope.delay, $scope.idx);
     }, true);
 	
 	$scope.$watch('conicalPeriods', function (newVal) {
 		drawCircles();
+		processStructure();
 		$scope.laaDelayGrid = calculateLaaDelay($scope.laa, $scope.delay, $scope.idx);
     }, true);
 	
 	$scope.$watch('phasePeriods', function (newVal) {
+		processStructure();
 		$scope.laaDelayGrid = calculateLaaDelay($scope.laa, $scope.delay, $scope.idx);
     }, true);
 	
 	
+
+
+
 	$scope.$watch('th', function (newVal) {
-		$scope.ki = new THREE.Vector3($scope.k*Math.cos($scope.th* Math.PI / 180) , 0, $scope.k*Math.sin($scope.th* Math.PI / 180));
-		$scope.ks = new THREE.Vector3($scope.k*Math.cos($scope.tth* Math.PI / 180) , 0,-$scope.k*Math.sin($scope.tth* Math.PI / 180));
+		$scope.ki = new THREE.Vector3(Math.cos($scope.th* Math.PI / 180) , 0, Math.sin($scope.th* Math.PI / 180));
+		$scope.ks = new THREE.Vector3(Math.cos($scope.tth* Math.PI / 180) , 0,-Math.sin($scope.tth* Math.PI / 180));
 		$scope.laaDelayGrid = calculateLaaDelay($scope.laa, $scope.delay, $scope.idx);
     }, true);
 	
 	$scope.$watch('tth', function (newVal) {
-		$scope.ki = new THREE.Vector3($scope.k*Math.cos($scope.th* Math.PI / 180) , 0, $scope.k*Math.sin($scope.th* Math.PI / 180));
-		$scope.ks = new THREE.Vector3($scope.k*Math.cos($scope.tth* Math.PI / 180) , 0,-$scope.k*Math.sin($scope.tth* Math.PI / 180));
-		$scope.laaDelayGrid = calculateLaaDelay($scope.laa, $scope.delay, $scope.idx);
-		
-    }, true);
-	
-	$scope.$watch('k', function (newVal) {
-		$scope.ki = new THREE.Vector3($scope.k*Math.cos($scope.th* Math.PI / 180) , 0, $scope.k*Math.sin($scope.th* Math.PI / 180));
-		$scope.ks = new THREE.Vector3($scope.k*Math.cos($scope.tth* Math.PI / 180) , 0,-$scope.k*Math.sin($scope.tth* Math.PI / 180));
+		$scope.ki = new THREE.Vector3(Math.cos($scope.th* Math.PI / 180) , 0, Math.sin($scope.th* Math.PI / 180));
+		$scope.ks = new THREE.Vector3(Math.cos($scope.tth* Math.PI / 180) , 0,-Math.sin($scope.tth* Math.PI / 180));
 		$scope.laaDelayGrid = calculateLaaDelay($scope.laa, $scope.delay, $scope.idx);
     }, true);
-	
 	
 	$scope.$watch('idx', function (newVal) {
 		$scope.laaDelayGrid = calculateLaaDelay($scope.laa, $scope.delay, $scope.idx);
-    }, true);
+	}, true);
+	
+
+
 	
 	
 	
 	var tick = function() {
+		$scope.timeStep = ($scope.timeStep + $scope.speed) % 360;
 
-			$scope.timeStep = ($scope.timeStep + $scope.speed) % 360;
-
-			$scope.spinStructure =  structure($scope.timeStep);
-			$scope.fftStructure = fftStructure($scope.spinStructure);
-			
-
-
-			
-
-			showStructure(arrows, $scope.spinStructure);
-			
-			//requestAnimationFrame( animate );
-			controls.update();
-			renderer.render( scene, camera );
-			
-			$scope.$applyAsync();
+		showStructure(arrows, $scope.spinStructure[parseInt($scope.timeStep/10)]);
+		
+		//requestAnimationFrame( animate );
+		controls.update();
+		renderer.render( scene, camera );
+		
+		$scope.$applyAsync();
 	}
 
 	setInterval(tick, 50);
@@ -303,9 +286,10 @@ app.controller('mainController', function($scope) {
 		drawArrows();
 		drawCircles();
 		
-		$scope.spinStructure =  structure($scope.timeStep);
-		$scope.fftStructure = fftStructure($scope.spinStructure);
-		showStructure(arrows, $scope.spinStructure);
+		//$scope.spinStructure =  structure($scope.timeStep);
+		//$scope.fftStructure = fftStructure($scope.spinStructure);
+		processStructure();
+		showStructure(arrows, $scope.spinStructure[0]);
 		
 		//requestAnimationFrame( animate )		
 		
@@ -329,17 +313,22 @@ app.controller('mainController', function($scope) {
 	
 
 	
+	function processStructure() {
+		for (i = 0; i < $scope.delay.length; i++) { 
+			$scope.spinStructure[i] =  structure(i*10);
+			$scope.fftStructure[i] = fftStructure($scope.spinStructure[i]);
+		}
+	}
 
 	
 	
 	function structure(timeStep){
 		vectors = Array();
-		wavelength = 5; // in number of spins
 		for (z = 0; z < $scope.gridSize[2]; z++) { 
 		for (y = 0; y < $scope.gridSize[1]; y++) { 
 		for (x = 0; x < $scope.gridSize[0]; x++) { 
 			
-			// start with magnetisation in z
+			// start with magnetisation pointing along z axis
 			var v0 = new THREE.Vector3( 0, 0, 1 );
 			
 			// dynamics
@@ -371,10 +360,12 @@ app.controller('mainController', function($scope) {
 		var fft_u = cfft(mag_u);
 		var fft_v = cfft(mag_v);
 		var fft_w = cfft(mag_w);
+
 		// fftshift
-		fft_u = fft_u.slice(8).concat(fft_u.slice(0,8));
-		fft_v = fft_v.slice(8).concat(fft_v.slice(0,8));
-		fft_w = fft_w.slice(8).concat(fft_w.slice(0,8));
+		var num = $scope.gridSize[0] / 2
+		fft_u = fft_u.slice(num).concat(fft_u.slice(0,num));
+		fft_v = fft_v.slice(num).concat(fft_v.slice(0,num));
+		fft_w = fft_w.slice(num).concat(fft_w.slice(0,num));
 		
 		return [fft_u, fft_v, fft_w];
 	}
@@ -507,7 +498,7 @@ app.controller('mainController', function($scope) {
 		//https://en.wikipedia.org/wiki/Stokes_parameters
 		//"""
 		
-		var chi = 0;// *Math.PI/180
+		var chi = 0;
 		var I = 1;
 		var Ip = 1;
 		
@@ -531,11 +522,11 @@ app.controller('mainController', function($scope) {
 		for (var j=0; j < delay.length; j++) {
 			laaDelayGrid[j] = [];
 			
-			var spinStructure =  structure(delay[j]);
-			var myfftStructure = fftStructure(spinStructure);
+			//var spinStructure =  structure(delay[j]);
+			//var myfftStructure = fftStructure(spinStructure);
 		
 			for (var i=0; i < P.length; i++) {
-				laaDelayGrid[j][i] = intensity(P[i], myfftStructure, idx)
+				laaDelayGrid[j][i] = intensity(P[i], $scope.fftStructure[j], idx);
 			}
 		}
 		

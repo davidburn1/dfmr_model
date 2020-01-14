@@ -26,10 +26,6 @@ app.directive('colormap', ['$window', function ($window) {
 
 
 
-
-
-
-
 function ColormapPlot(id, data){
 	var	margin = {top: 10, right: 10, bottom: 40, left: 50};
 	var width = 300 - margin.left - margin.right;
@@ -38,27 +34,52 @@ function ColormapPlot(id, data){
 	var svg = d3.select(id).append("svg")
 		.attr("width", width + margin.left + margin.right)
 		.attr("height", height + margin.top + margin.bottom)
-	  .append("g")
-		.attr("transform", 
-			  "translate(" + margin.left + "," + margin.top + ")");
+	  	.append("g")
+		.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
 		
 
 	//var x = d3.scaleBand().range([0, width]).padding(0.1);
 	//var y = d3.scaleBand().range([0, width]).padding(0.1);
-	var	x = d3.scaleLinear().range([0,width]);
+	var	x = d3.scaleLinear().range([0, width]);
 	var	y = d3.scaleLinear().range([height, 0]);
 
-	//x.domain(data.map(function(d,i) { return i-8; }));
-	x.domain(d3.extent(data, function(d) { return d.x; }));
-	y.domain(d3.extent(data, function(d) { return d.y; }));
+	//x.domain(d3.extent(data, function(d) { return d.x; }));
+	//y.domain(d3.extent(data, function(d) { return d.y; }));
+	x.domain([0,360]);
+	y.domain([0,180]);
 
 	
+
+
+
+	var myColor = d3.scaleSequential()
+	.interpolator(d3.interpolateRdYlBu)
+//		.interpolator(d3.interpolateInferno)
+	//.domain(d3.extent(data, function(d) { return d.value; }));
+	.domain([-1,1]);
+	
+
+// add the squares
+svg.selectAll()
+	.data(data, function(d) {return d.x+':'+d.y;})
+	.enter()
+	.append("rect")
+		  .attr("x", function(d) { return x(d.x) })
+		  .attr("y", function(d) { return y(d.y )-y(0)+y(15)  })
+		  //.attr("width", x.bandwidth() )
+		  //.attr("height", y.bandwidth() )
+		  .attr("width", x(10) )
+		  .attr("height", y(0)-y(15) )
+		  .style("fill", function(d) { return myColor(d.value)} )
+		  .style("stroke-width", 0)
+		  .style("stroke", "none")
+		  .style("opacity", 1)
 	
 	
 	
 	
-	var axisBottom = d3.axisBottom(x).ticks(4);
+	var axisBottom = d3.axisBottom(x).tickValues([0, 45, 90, 135, 180, 225, 270, 315, 360]); //.ticks(5);
 	svg.append("g")
 		.attr("class", "axis axis--xb")
 		.attr("transform", "translate(0," + height + ")")
@@ -69,7 +90,7 @@ function ColormapPlot(id, data){
 		.attr("class", "axis axis--xt")
 		.call(axisTop);
 		
-	var axisLeft = d3.axisLeft(y);
+	var axisLeft = d3.axisLeft(y).tickValues([0, 45, 90, 135, 180]);;
 	svg.append("g")
 		.attr("class", "axis axis--yl")
 		.call(axisLeft);
@@ -99,33 +120,6 @@ function ColormapPlot(id, data){
   
 
 
-	var myColor = d3.scaleSequential()
-		.interpolator(d3.interpolateRdYlBu)
-//		.interpolator(d3.interpolateInferno)
-		//.domain(d3.extent(data, function(d) { return d.value; }));
-		.domain([-1,1]);
-		
-	// set the colour scale
-	//var color = d3.scaleOrdinal(d3.schemeCategory10);
-			
-			
-  // add the squares
-	svg.selectAll()
-		.data(data, function(d) {return d.x+':'+d.y;})
-		.enter()
-		.append("rect")
-			  .attr("x", function(d) { return x(d.x) })
-			  .attr("y", function(d) { return y(d.y + 10) })
-			  .attr("rx", 4)
-			  .attr("ry", 4)
-			  //.attr("width", x.bandwidth() )
-			  //.attr("height", y.bandwidth() )
-			  
-			  .attr("width", x(15) )
-			  .attr("height", 20 )
-			  .style("fill", function(d) { return myColor(d.value)} )
-			  .style("stroke-width", 4)
-			  .style("stroke", "none")
-			  .style("opacity", 0.8)
+
 
 }
