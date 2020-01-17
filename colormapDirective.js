@@ -1,8 +1,8 @@
 app.directive('colormap', ['$window', function ($window) {
     function linkFunc(scope, element, attrs) {
 
-		//scope.idx = 10;
-		scope.laa = [0,15,30,45,60,75,90,105,120,135,150,165];
+	//scope.idx = 10;
+	scope.laa = [0,15,30,45,60,75,90,105,120,135,150,165];
 
         scope.$watch('model', function (newVal) {
 			refreshDFMR();
