@@ -17,7 +17,40 @@ app.directive('colormap', ['$window', function ($window) {
 			scope.ki = new THREE.Vector3(Math.cos(scope.options.th* Math.PI / 180) , 0, Math.sin(scope.options.th* Math.PI / 180));
 			scope.ks = new THREE.Vector3(Math.cos(scope.options.tth* Math.PI / 180) , 0,-Math.sin(scope.options.tth* Math.PI / 180));
 
-			var laaDelayGrid = calculateLaaDelay(scope.laa, scope.delay, scope.idx);
+			//var laaDelayGrid = calculateLaaDelay(scope.laa, scope.delay, scope.idx);
+
+
+			var P = PS(scope.laa);
+			
+			var laaDelayGrid = [];
+			for (var j=0; j < scope.delay.length; j++) {
+				laaDelayGrid[j] = [];
+				for (var i=0; i < P.length; i++) {
+					laaDelayGrid[j][i] = intensity(P[i], scope.model[j], scope.idx);
+				}
+			}
+
+			console.log(intensity(P[0], scope.model[0], scope.idx));
+			
+			// differentiate grid along delay 
+			var laaDelayGridDiff = [];
+			for (var j=0; j < scope.delay.length; j++) {
+				laaDelayGridDiff[j] = [];
+				for (var i=0; i < P.length; i++) {
+					if (j==0) {
+						laaDelayGridDiff[j][i] = 0;
+					} else {
+						laaDelayGridDiff[j][i] = laaDelayGrid[j][i]  - laaDelayGrid[j-1][i];
+					}
+				}
+			}
+
+			laaDelayGrid = laaDelayGridDiff;	
+
+
+
+
+
 
 			var data = [];
 			for (var j=0; j < laaDelayGrid.length; j++) {
@@ -61,37 +94,6 @@ app.directive('colormap', ['$window', function ($window) {
 			}
 			return out;
 		}
-		
-
-		
-		function calculateLaaDelay(laa, delay, idx){
-			var P = PS(laa);
-			
-			var laaDelayGrid = [];
-			for (var j=0; j < delay.length; j++) {
-				laaDelayGrid[j] = [];
-				for (var i=0; i < P.length; i++) {
-					laaDelayGrid[j][i] = intensity(P[i], scope.model[j], idx);
-				}
-			}
-			
-			// differentiate grid along delay 
-			var laaDelayGridDiff = [];
-			for (var j=0; j < delay.length; j++) {
-				laaDelayGridDiff[j] = [];
-				for (var i=0; i < P.length; i++) {
-					if (j==0) {
-						laaDelayGridDiff[j][i] = 0;
-					} else {
-						laaDelayGridDiff[j][i] = laaDelayGrid[j][i]  - laaDelayGrid[j-1][i];
-					}
-				}
-			}
-			
-			return laaDelayGridDiff;
-			//return laaDelayGrid;
-		}
-		
 		
 
 		

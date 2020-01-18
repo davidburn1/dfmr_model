@@ -63,13 +63,14 @@
 
 			<div class="row">
 				<div class="col-sm-3 text-right"><b> Speed:</b></div> 
-				<div class="col-sm-9"> <rzslider rz-slider-model="speed" rz-slider-options="{ceil:10}"></rzslider> </div>
+				<div class="col-sm-9"> <rzslider rz-slider-model="speed" rz-slider-options="{ceil:100}"></rzslider> </div>
 			</div>
-			
-			<div class="row">
-				<div class="col-sm-3 text-right"><b> Time step:</b></div> 
-				<div class="col-sm-9"> <rzslider rz-slider-model="timeStep" rz-slider-options="{ceil:360}"></rzslider> </div>
+
+			<div class="row" ng-hide="speed!=0">
+				<div class="col-sm-3 text-right"><b> time step:</b></div> 
+				<div class="col-sm-9"> <rzslider rz-slider-model="timeStep" rz-slider-options="{ceil:35}"></rzslider> </div>
 			</div>
+
 			
 
 			<!--
@@ -154,7 +155,7 @@ var app = angular.module('myApp', ['rzSlider']);
 
 app.controller('mainController', function($scope) {
 	$scope.timeStep = 0;
-	$scope.speed = 4;
+	$scope.speed = 40;
 
 	$scope.gridSize = [16,1,1];
 	$scope.circlesGridSize = [16,1,1];
@@ -171,6 +172,7 @@ app.controller('mainController', function($scope) {
 	$scope.dfmrOptions['th'] = 10;
 	$scope.dfmrOptions['tth'] = 20;
 
+	$scope.delayIndex = 0;
 	$scope.delay = [];
 	for (i = 0; i < 360; i=i+10) {
 		$scope.delay.push(i);
@@ -207,21 +209,28 @@ app.controller('mainController', function($scope) {
 	$scope.$watch('dfmrOptions.th', function (newVal) {
 		$scope.dfmrOptions.tth = $scope.dfmrOptions.th;
 	}, true);
-		
-	
-	var tick = function() {
-		$scope.timeStep = ($scope.timeStep + $scope.speed) % 360;
 
-		showStructure(arrows, $scope.spinStructure[parseInt($scope.timeStep/10)]);
+	$scope.$watch('timeStep', function (newVal) {
+		showStructure(arrows, $scope.spinStructure[$scope.timeStep]);
+	}, true);
 		
-		//requestAnimationFrame( animate );
+	$scope.tickCounter = 0;
+	var tick = function() {
+		$scope.tickCounter += 1;
+
+		if ($scope.speed >0 ){
+			if ($scope.tickCounter >= (100/$scope.speed)){
+				$scope.tickCounter = 0;
+				$scope.timeStep = ($scope.timeStep  + 1) % $scope.delay.length;
+				$scope.$applyAsync();
+			}
+		}
+	
 		controls.update();
 		renderer.render( scene, camera );
-		
-		$scope.$applyAsync();
 	}
 
-	setInterval(tick, 100);
+	setInterval(tick, 10);
 	
 
 	
@@ -286,7 +295,7 @@ app.controller('mainController', function($scope) {
 	
 	function processStructure() {
 		for (i = 0; i < $scope.delay.length; i++) { 
-			$scope.spinStructure[i] =  structure(i*10);
+			$scope.spinStructure[i] =  structure($scope.delay[i]);
 			$scope.fftStructure[i] = fftStructure($scope.spinStructure[i]);
 		}
 	}	
@@ -446,8 +455,8 @@ app.controller('mainController', function($scope) {
 		
 		
 		//requestAnimationFrame( animate );
-	//	controls.update();
-	//	renderer.render( scene, camera );
+		//controls.update();
+		//renderer.render( scene, camera );
 	//}
 
 	
