@@ -38,7 +38,7 @@ app.directive('colormap', ['$window', function ($window) {
 				laaDelayGridDiff[j] = [];
 				for (var i=0; i < P.length; i++) {
 					if (j==0) {
-						laaDelayGridDiff[j][i] = 0;
+						laaDelayGridDiff[j][i] = laaDelayGrid[j][i]  - laaDelayGrid[scope.delay.length-1][i];
 					} else {
 						laaDelayGridDiff[j][i] = laaDelayGrid[j][i]  - laaDelayGrid[j-1][i];
 					}
