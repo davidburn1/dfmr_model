@@ -4,7 +4,7 @@
 <style>
 #structure {
 		width:100%;
-		height:580px;
+		height:500px;
 	}
 	
 .container-fluid {
@@ -15,79 +15,70 @@
 		
 <div ng-app="myApp" ng-controller="mainController" >
 <div class="container-fluid">
-	<h1> CSO DFMR </h1>
-	
 	
 	<div class="row">
 		<div class="col-sm-6">
 
+			<!--
 			<div class="row">
 				<div class="col-sm-3 text-right"><b>Tilt Y angle:</b></div> 
-				<div class="col-sm-9"> <rzslider rz-slider-model="tiltY" rz-slider-options="{ceil:90}"></rzslider> </div>
+				<div class="col-sm-9"> <rzslider rz-slider-model="params.tiltY" rz-slider-options="{ceil:90}"></rzslider> </div>
 			</div>	
 			<div class="row">
 				<div class="col-sm-3 text-right"><b>Tilt Z angle:</b></div> 
-				<div class="col-sm-9"> <rzslider rz-slider-model="tiltZ" rz-slider-options="{ceil:90}"></rzslider> </div>
+				<div class="col-sm-9"> <rzslider rz-slider-model="params.tiltZ" rz-slider-options="{ceil:90}"></rzslider> </div>
 			</div>	
-			
+			-->
 			<div class="row">
 				<div class="col-sm-3 text-right"><b>Zeeman angle:</b></div> 
-				<div class="col-sm-9"> <rzslider rz-slider-model="zeeman" rz-slider-options="{ceil:90}"></rzslider> </div>
+				<div class="col-sm-9"> <rzslider rz-slider-model="params.zeeman" rz-slider-options="{ceil:90, floor:-90}"></rzslider> </div>
 			</div>	
-
 			<div class="row">
 				<div class="col-sm-3 text-right"><b> Conical periods:</b></div> 
-				<div class="col-sm-9"> <rzslider rz-slider-model="conicalPeriods" rz-slider-options="{ceil:8, floor:-8}"></rzslider> </div>
+				<div class="col-sm-9"> <rzslider rz-slider-model="params.conicalPeriods" rz-slider-options="{ceil:8, floor:-8}"></rzslider> </div>
 			</div>
-		
 			<div class="row">
 				<div class="col-sm-3 text-right"><b> Phase periods:</b></div> 
-				<div class="col-sm-9"> <rzslider rz-slider-model="phasePeriods" rz-slider-options="{ceil:8, floor:-8}"></rzslider> </div>
-			</div>
-		
-			<div class="row">
-				<div class="col-sm-3 text-right"><b> Cone angle:</b></div> 
-				<div class="col-sm-9"> <rzslider rz-slider-model="hall" rz-slider-options="{ceil:90}"></rzslider> </div>
-			</div>
-			
-
-
-
-
-			<div class="row">
-				<div class="col-sm-3 text-right"><b> th:</b></div> 
-				<div class="col-sm-9"> <rzslider rz-slider-model="dfmrOptions.th" rz-slider-options="{ceil:90}"></rzslider> </div>
+				<div class="col-sm-9"> <rzslider rz-slider-model="params.phasePeriods" rz-slider-options="{ceil:8, floor:-8}"></rzslider> </div>
 			</div>
 			<div class="row">
-				<div class="col-sm-3 text-right"><b> tth:</b></div> 
-				<div class="col-sm-9"> <rzslider rz-slider-model="dfmrOptions.tth" rz-slider-options="{ceil:90}"></rzslider> </div>
+				<div class="col-sm-3 text-right"><b> Cone angle a:</b></div> 
+				<div class="col-sm-9"> <rzslider rz-slider-model="params.hallA" rz-slider-options="{ceil:90}"></rzslider> </div>
 			</div>
+			<div class="row">
+				<div class="col-sm-3 text-right"><b> cone angle b:</b></div> 
+				<div class="col-sm-9"> <rzslider rz-slider-model="params.hallB" rz-slider-options="{ceil:90}"></rzslider> </div>
+			</div>
+			<div class="row">
+				<div class="col-sm-3 text-right"><b> cone periods a:</b></div> 
+				<div class="col-sm-9"> <rzslider rz-slider-model="params.hallPeriodsA" rz-slider-options="{ceil:8, floor:-8}"></rzslider> </div>
+			</div>
+			<div class="row">
+				<div class="col-sm-3 text-right"><b> cone periods b:</b></div> 
+				<div class="col-sm-9"> <rzslider rz-slider-model="params.hallPeriodsB" rz-slider-options="{ceil:8, floor:-8}"></rzslider> </div>
+			</div>
+	
 						
 
-
+			<!--
 			<div class="row">
 				<div class="col-sm-3 text-right"><b> Speed:</b></div> 
 				<div class="col-sm-9"> <rzslider rz-slider-model="speed" rz-slider-options="{ceil:100}"></rzslider> </div>
 			</div>
-
 			<div class="row" ng-hide="speed!=0">
 				<div class="col-sm-3 text-right"><b> time step:</b></div> 
 				<div class="col-sm-9"> <rzslider rz-slider-model="timeStep" rz-slider-options="{ceil:35}"></rzslider> </div>
 			</div>
-
-			
-
-			<!--
-			<div class="row">
-				<div class="col-sm-12"><h2> FFT </h2> </div> 
-				<div graph-plot model="fftStructure[(timeStep/10 | number : 0) % 36 ][0]"> </div>
-				<br>
-				<div graph-plot model="fftStructure[(timeStep/10 | number : 0) % 36][1]"> </div>
-				<br>
-				<div graph-plot model="fftStructure[(timeStep/10 | number : 0) % 36][2]"> </div>
-			</div>
 			-->
-			
+
+			<div class="row">
+				<div class="col-sm-12 text-right">
+					<textarea id="structureTextarea" ng-model="structureArray"  class="form-control" style="min-width: 100%"></textarea>
+					<button onClick="copyStructure()">copy</button>
+				</div>
+			</div>
+
+	
 			
 		</div>
 	
@@ -103,17 +94,15 @@
 	</div>
 
 
+
 	<div class="row">
 		<div class="col-sm-4">
-			<h2> Qh1 </h2> 
 			<div colormap delay="delay" model="fftStructure" options="dfmrOptions" idx=6> </div>
 		</div>
 		<div class="col-sm-4">
-			<h2> [001] </h2> 
 			<div colormap delay="delay" model="fftStructure" options="dfmrOptions" idx=8> </div>
 		</div>
 		<div class="col-sm-4">
-			<h2> Qh2 </h2> 
 			<div colormap delay="delay" model="fftStructure" options="dfmrOptions" idx=10> </div>
 		</div>
 	</div>
@@ -127,15 +116,11 @@
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/angularjs-slider/7.0.0/rzslider.min.css">
 
-
-
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/angularjs-slider/7.0.0/rzslider.min.js"></script>
-
-
 
 <script src="https://d3js.org/d3.v5.min.js"></script>
 
@@ -147,10 +132,23 @@
 
 
 <script>
-var app = angular.module('myApp', ['rzSlider']);
+
+
+	function copyStructure(){
+			var copyText = document.getElementById("structureTextarea");
+			copyText.select();
+			document.execCommand("copy");
+		}
+	
+	var app = angular.module('myApp', ['rzSlider']);
 </script>
-<script src="./graphDirective.js"></script>
+
 <script src="./colormapDirective.js"></script>
+
+
+
+
+
 
 
 
@@ -159,23 +157,30 @@ var app = angular.module('myApp', ['rzSlider']);
 
 app.controller('mainController', function($scope) {
 	$scope.timeStep = 0;
-	$scope.speed = 40;
+	$scope.speed = 30;
 
-	$scope.gridSize = [16,1,1];
-	$scope.circlesGridSize = [16,1,1];
+	$scope.gridSize = [1,1,16];
+	$scope.circlesGridSize = [1,1,16];
 	
 	// spin structure params
-	$scope.tiltY = 90;
-	$scope.tiltZ = 90;
-	$scope.zeeman = 0;
-	$scope.conicalPeriods = 2; // in z direction
-	$scope.phasePeriods = 0;
-	$scope.hall = 10;
+	$scope.params = {};
+	$scope.params.tiltY = 0;
+	$scope.params.tiltZ = 0;
+	$scope.params.zeeman = 0;
+	$scope.params.conicalPeriods = 2; // in z direction
+	$scope.params.phasePeriods = 0;
+	$scope.params.hallA = 10;
+	$scope.params.hallB = 10;
+
+	$scope.params.hallPeriodsA = 2;
+	$scope.params.hallPeriodsB = 2;
+
 
 	// dfmr params
 	$scope.dfmrOptions = {};
-	$scope.dfmrOptions['th'] = 10;
-	$scope.dfmrOptions['tth'] = 20;
+	$scope.dfmrOptions['th'] = 45;
+
+
 
 	$scope.delayIndex = 0;
 	$scope.delay = [];
@@ -184,40 +189,18 @@ app.controller('mainController', function($scope) {
 	} 
 
 	$scope.spinStructure =  [];
+	$scope.structureArray =  [];
 	$scope.fftStructure = [];
 
-	$scope.$watch('tiltY', function (newVal) {
-		drawCircles();
-		processStructure();
-    }, true);
-	$scope.$watch('tiltZ', function (newVal) {
-		drawCircles();
-		processStructure();
-    }, true);
-	
-	$scope.$watch('zeeman', function (newVal) {
-		drawCircles();
-		processStructure();
-    }, true);
-	
-	$scope.$watch('hall', function (newVal) {
-		drawCircles();
-		processStructure();
-    }, true);
-	
-	$scope.$watch('conicalPeriods', function (newVal) {
-		drawCircles();
-		processStructure();
-    }, true);
-	
-	$scope.$watch('phasePeriods', function (newVal) {
-		processStructure();
-	}, true);
-		
 
-	$scope.$watch('dfmrOptions.th', function (newVal) {
-		$scope.dfmrOptions.tth = $scope.dfmrOptions.th;
-	}, true);
+	$scope.$watch('params', function (newVal) {
+		processStructure();
+		drawCircles();
+    }, true);
+
+
+
+	
 
 	$scope.$watch('timeStep', function (newVal) {
 		showStructure(arrows, $scope.spinStructure[$scope.timeStep]);
@@ -258,6 +241,8 @@ app.controller('mainController', function($scope) {
 
 
 
+
+
 			
 	function init( ) {
 		container = document.getElementById("structure");
@@ -267,13 +252,11 @@ app.controller('mainController', function($scope) {
 		camera.up.set( 0, 0, 1 );
 		camera.lookAt( 0,0, 0);
 
-	
 		controls = new THREE.TrackballControls( camera, container );
 		controls.dynamicDampingFactor = 0.5;
 		controls.rotateSpeed = 5;
 		scene = new THREE.Scene();
 		scene.add( camera );
-
 
 		drawArrows();
 		drawCircles();
@@ -287,8 +270,6 @@ app.controller('mainController', function($scope) {
 		renderer.setSize(container.offsetWidth, container.offsetHeight );
 		renderer.setClearColor( 0xffffff, 1);
 		container.appendChild( renderer.domElement );
-		
-		//controls = new THREE.OrbitControls( camera, renderer.domElement );
 		
 		// axes arrows
 		arrow = new THREE.ArrowHelper(new THREE.Vector3(1,0,0), new THREE.Vector3(0,0,0), 5, 0xff0000, 0.5, 0.4);
@@ -304,6 +285,16 @@ app.controller('mainController', function($scope) {
 			$scope.spinStructure[i] =  structure($scope.delay[i]);
 			$scope.fftStructure[i] = fftStructure($scope.spinStructure[i]);
 		}
+
+		// convert three vectors into normal arrays
+		var out = [];
+		for (i=0; i < $scope.spinStructure.length; i++) { // loop through delay
+			out[i] = [];
+			for (j=0; j < $scope.spinStructure[i].length; j++) { // loop through space
+				out[i][j] = [$scope.spinStructure[i][j]['x'], $scope.spinStructure[i][j]['y'], $scope.spinStructure[i][j]['z']]
+			}
+		}
+		$scope.structureArray = JSON.stringify(out);
 	}	
 	
 	function structure(timeStep){
@@ -316,25 +307,30 @@ app.controller('mainController', function($scope) {
 			var v0 = new THREE.Vector3( 0, 0, 1 );
 			
 			// dynamics
-			v0.applyAxisAngle( new THREE.Vector3( 1, 0, 0 ), Math.PI/180* $scope.hall );					// rotate about x by hall angle
-			var phaseStep = 2*Math.PI*$scope.phasePeriods* x /$scope.gridSize[0] + timeStep/180*Math.PI;
-			v0.applyAxisAngle( new THREE.Vector3( 0, 0, 1 ), phaseStep )									// rotate about z by precession angle
+			var phaseStep = 2*Math.PI* $scope.params.phasePeriods * z /$scope.gridSize[2] + timeStep/180*Math.PI; 	// provides an angle
+			var aa = $scope.params.hallA * Math.sin(2*Math.PI* $scope.params.hallPeriodsA * z /$scope.gridSize[2]);
+			var bb = $scope.params.hallB;// * Math.cos(2*Math.PI* $scope.params.hallPeriodsB  * z /$scope.gridSize[2]);
+			v0.applyAxisAngle( new THREE.Vector3( 1, 0, 0 ), Math.PI/180 * aa  * Math.sin(phaseStep));			// rotate about x 
+			v0.applyAxisAngle( new THREE.Vector3( 0, 1, 0 ), Math.PI/180 * bb  * Math.cos(phaseStep));			// rotate about y
 			
 			
-			v0.applyAxisAngle( new THREE.Vector3( 1, 0, 0 ), (90-$scope.zeeman)*Math.PI/180 )				// rotate by 90 degrees - zeeman about x axis
+			v0.applyAxisAngle( new THREE.Vector3( 1, 0, 0 ), (90-$scope.params.zeeman)*Math.PI/180 )				// rotate by 90 degrees - zeeman about x axis
+
+
 		
 			// conical structure
-			var conicalStep = 2*Math.PI*$scope.conicalPeriods * x /$scope.gridSize[0];
-			v0.applyAxisAngle( new THREE.Vector3( 0, 0, 1), conicalStep )									// rotate about z axis by conical precession
+			var conicalStep = 2*Math.PI*$scope.params.conicalPeriods * z /$scope.gridSize[2];
+			v0.applyAxisAngle( new THREE.Vector3( 0, 0, 1), conicalStep )											// rotate about z axis by conical precession
 			
-			v0.applyAxisAngle( new THREE.Vector3( 0, 1, 0 ), ($scope.tiltY * Math.PI / 180));				// rotate about y by tilt angle
-			v0.applyAxisAngle( new THREE.Vector3( 0, 0, 1 ), ($scope.tiltZ * Math.PI / 180));				// rotate about z by tilt angle
+			v0.applyAxisAngle( new THREE.Vector3( 0, 1, 0 ), ($scope.params.tiltY * Math.PI / 180));				// rotate about y by tilt angle
+			v0.applyAxisAngle( new THREE.Vector3( 0, 0, 1 ), ($scope.params.tiltZ * Math.PI / 180));				// rotate about z by tilt angle
 			
 			vectors = vectors.concat(v0);
 		}}}
 		return vectors
 	}
-	
+
+
 	function fftStructure(vectors){
 		var mag_u = vectors.map(function(m){ return m.x });
 		var mag_v = vectors.map(function(m){ return m.y });
@@ -345,7 +341,7 @@ app.controller('mainController', function($scope) {
 		var fft_w = cfft(mag_w);
 
 		// fftshift
-		var num = $scope.gridSize[0] / 2
+		var num = $scope.gridSize[2] / 2
 		fft_u = fft_u.slice(num).concat(fft_u.slice(0,num));
 		fft_v = fft_v.slice(num).concat(fft_v.slice(0,num));
 		fft_w = fft_w.slice(num).concat(fft_w.slice(0,num));
@@ -366,57 +362,49 @@ app.controller('mainController', function($scope) {
 
 		return circle;
 	}
+
 		
 	function drawCircles() {
 		scene.remove(circles); 
 		circles = new THREE.Group();
 
+		if ($scope.spinStructure.length == 0) {return;}
+
 		for (z = 0; z < $scope.circlesGridSize[2]; z++) { 
 		for (y = 0; y < $scope.circlesGridSize[1]; y++) { 
 		for (x = 0; x < $scope.circlesGridSize[0]; x++) { 
 			// static circles
-			length = Math.cos(Math.PI/180*$scope.zeeman);
+			length = Math.cos(Math.PI/180*$scope.params.zeeman);
 			circ = circle(length, 0xaaffaa);							// static circles in x-y plane
-			translation = new THREE.Matrix4().makeTranslation(0,0, Math.sin(Math.PI/180*$scope.zeeman));
+			translation = new THREE.Matrix4().makeTranslation(0,0, Math.sin(Math.PI/180*$scope.params.zeeman));
 			circ.applyMatrix(translation);
-			rotation = new THREE.Matrix4().makeRotationAxis(new THREE.Vector3(0, 1, 0), ($scope.tiltY * Math.PI / 180));
+			rotation = new THREE.Matrix4().makeRotationAxis(new THREE.Vector3(0, 1, 0), ($scope.params.tiltY * Math.PI / 180));
 			circ.applyMatrix(rotation);									// rotate by tilt angles
-			rotation = new THREE.Matrix4().makeRotationAxis(new THREE.Vector3(0, 0, 1), ($scope.tiltZ * Math.PI / 180));
+			rotation = new THREE.Matrix4().makeRotationAxis(new THREE.Vector3(0, 0, 1), ($scope.params.tiltZ * Math.PI / 180));
 			circ.applyMatrix(rotation);									// rotate by tilt angles
 
 
 			translation = new THREE.Matrix4().makeTranslation(x,y,z);	// translate to position of spin
 			circ.applyMatrix(translation);
 			circles.add( circ );
-			
-			// make dynamics red circle in x-y plane
-			circ = circle(Math.sin(Math.PI/180* $scope.hall), 0xffaaaa);
-			
-			// translate circle to the end of the arrow
-			length = Math.cos(Math.PI/180*$scope.hall);
-			transformation = new THREE.Matrix4().makeTranslation(0,0, length);
-			circ.applyMatrix(transformation);
-			
-			// now do the same transformations as we do to the arrow			
-			//rotate by 90 degrees - zeeman angle about x axis
-			rotation = new THREE.Matrix4().makeRotationAxis(new THREE.Vector3(1, 0, 0), (90-$scope.zeeman) * Math.PI / 180);
-			circ.applyMatrix(rotation);
 
-			var conicalStep = 2*Math.PI*$scope.conicalPeriods*x/$scope.gridSize[0];
-			rotation = new THREE.Matrix4().makeRotationAxis(new THREE.Vector3(0, 0, 1),conicalStep);
-			circ.applyMatrix(rotation);
-			
-			rotation = new THREE.Matrix4().makeRotationAxis(new THREE.Vector3(0, 1, 0), ($scope.tiltY * Math.PI / 180 ));
-			circ.applyMatrix(rotation);
-			rotation = new THREE.Matrix4().makeRotationAxis(new THREE.Vector3(0, 0, 1), ($scope.tiltZ * Math.PI / 180 ));
-			circ.applyMatrix(rotation);
 
-	
-			
-			transformation = new THREE.Matrix4().makeTranslation(x,y, z);
+
+			// dynamic circles
+			var lineGeometry = new THREE.Geometry();
+			var vertArray = lineGeometry.vertices;
+			for (var i=0; i < $scope.spinStructure.length; i++) { // loop through time steps
+				vertArray.push($scope.spinStructure[i][z]);
+			}
+			vertArray.push($scope.spinStructure[0][z]); // add first point agian to join up the path
+			lineGeometry.computeLineDistances();
+			var lineMaterial = new THREE.LineBasicMaterial({ color: 0xff0000 });
+			var circ = new THREE.Line(lineGeometry, lineMaterial);
+
+			transformation = new THREE.Matrix4().makeTranslation(x,y,z);
 			circ.applyMatrix(transformation);					// translate to position of spin
-
 			circles.add( circ );
+
 		}}}
 				
 		circles.applyMatrix(translateToCenter);
@@ -441,9 +429,7 @@ app.controller('mainController', function($scope) {
 		for (i = 0; i < arrows.children.length; i++ ) { 
 			arrows.children[i].setDirection(omf[i]);
 		}
-	}
-	
-	
+	}	
 	
 	function onWindowResize() {
 		camera.aspect = window.innerWidth / window.innerHeight;
@@ -451,9 +437,6 @@ app.controller('mainController', function($scope) {
 		renderer.setSize( window.innerWidth, window.innerHeight );
 		controls.handleResize();
 	}
-	
-	
-
 	
 });
 </script>

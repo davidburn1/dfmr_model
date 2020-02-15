@@ -1,7 +1,7 @@
 app.directive('colormap', ['$window', function ($window) {
     function linkFunc(scope, element, attrs) {
 
-	scope.laa = [0,15,30,45,60,75,90,105,120,135,150,165];
+		scope.laa = [0,15,30,45,60,75,90,105,120,135,150,165];
 
         scope.$watch('model', function (newVal) {
 			refreshDFMR();
@@ -14,11 +14,11 @@ app.directive('colormap', ['$window', function ($window) {
 
 		function refreshDFMR() {
 			//console.log("refresh DFMR")
-			scope.ki = new THREE.Vector3(Math.cos(scope.options.th* Math.PI / 180) , 0, Math.sin(scope.options.th* Math.PI / 180));
-			scope.ks = new THREE.Vector3(Math.cos(scope.options.tth* Math.PI / 180) , 0,-Math.sin(scope.options.tth* Math.PI / 180));
-
-			//var laaDelayGrid = calculateLaaDelay(scope.laa, scope.delay, scope.idx);
-
+			//scope.ki = new THREE.Vector3(Math.cos(scope.options.th* Math.PI / 180) , 0, Math.sin(scope.options.th* Math.PI / 180));
+			//scope.ks = new THREE.Vector3(Math.cos(scope.options.th* Math.PI / 180) , 0,-Math.sin(scope.options.th* Math.PI / 180));
+			
+			scope.ki = new THREE.Vector3(Math.sin(scope.options.th* Math.PI / 180) , 0, Math.cos(scope.options.th* Math.PI / 180));
+			scope.ks = new THREE.Vector3(-Math.sin(scope.options.th* Math.PI / 180) , 0,Math.cos(scope.options.th* Math.PI / 180));
 
 			var P = PS(scope.laa);
 			
@@ -30,8 +30,7 @@ app.directive('colormap', ['$window', function ($window) {
 				}
 			}
 
-			console.log(intensity(P[0], scope.model[0], scope.idx));
-			
+
 			// differentiate grid along delay 
 			var laaDelayGridDiff = [];
 			for (var j=0; j < scope.delay.length; j++) {
@@ -101,6 +100,7 @@ app.directive('colormap', ['$window', function ($window) {
 			//"""
 			//Scattered intensity from an input polarisation P and incident vector ki and output vector ks
 			//From equation A6 in Zhang_PRB_2017
+			//equation 17 in VanderLaan_CRPhysique_2008
 			//"""
 			var F = 1;
 
