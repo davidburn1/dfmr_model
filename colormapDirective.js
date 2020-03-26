@@ -137,7 +137,7 @@ app.directive('colormap', ['$window', function ($window) {
 
 
 function ColormapPlot(id, data){
-	var	margin = {top: 10, right: 10, bottom: 40, left: 50};
+	var	margin = {top: 10, right: 15, bottom: 40, left: 50};
 	var width = 300 - margin.left - margin.right;
 	var height = 280 - margin.top - margin.bottom;
 	
@@ -149,13 +149,10 @@ function ColormapPlot(id, data){
 
 		
 
-	//var x = d3.scaleBand().range([0, width]).padding(0.1);
-	//var y = d3.scaleBand().range([0, width]).padding(0.1);
+
 	var	x = d3.scaleLinear().range([0, width]);
 	var	y = d3.scaleLinear().range([height, 0]);
 
-	//x.domain(d3.extent(data, function(d) { return d.x; }));
-	//y.domain(d3.extent(data, function(d) { return d.y; }));
 	x.domain([0,360]);
 	y.domain([0,180]);
 
@@ -177,8 +174,6 @@ svg.selectAll()
 	.append("rect")
 		  .attr("x", function(d) { return x(d.x) })
 		  .attr("y", function(d) { return y(d.y )-y(0)+y(15)  })
-		  //.attr("width", x.bandwidth() )
-		  //.attr("height", y.bandwidth() )
 		  .attr("width", x(10) )
 		  .attr("height", y(0)-y(15) )
 		  .style("fill", function(d) { return myColor(d.value)} )
@@ -189,10 +184,11 @@ svg.selectAll()
 	
 	
 	
-	var axisBottom = d3.axisBottom(x).tickValues([0, 45, 90, 135, 180, 225, 270, 315, 360]); //.ticks(5);
+	var axisBottom = d3.axisBottom(x).tickValues([0, 45, 90, 135, 180, 225, 270, 315, 360]); 
 	svg.append("g")
 		.attr("class", "axis axis--xb")
 		.attr("transform", "translate(0," + height + ")")
+		.style("font", "14px Arial")
 		.call(axisBottom)
 		
 	var axisTop = d3.axisBottom(x).tickFormat("");
@@ -203,6 +199,7 @@ svg.selectAll()
 	var axisLeft = d3.axisLeft(y).tickValues([0, 45, 90, 135, 180]);;
 	svg.append("g")
 		.attr("class", "axis axis--yl")
+		.style("font", "14px Arial")
 		.call(axisLeft);
 		
 	var axisRight = d3.axisLeft(y).tickFormat("");
@@ -214,14 +211,14 @@ svg.selectAll()
 
 	
 	svg.append("text")             
-		  .attr("transform", "translate(" + (width/2) + " ," + (height + margin.top + 20) + ")")
+		  .attr("transform", "translate(" + (width/2) + " ," + (height + margin.top + 25) + ")")
 		  .style("text-anchor", "middle")
 		  .text("Delay");
 		  
 
 	svg.append("text")
 		  .attr("transform", "rotate(-90)")
-		  .attr("y", 0 - margin.left)
+		  .attr("y", 0 - (margin.left + 5))
 		  .attr("x",0 - (height / 2))
 		  .attr("dy", "1em")
 		  .style("text-anchor", "middle")

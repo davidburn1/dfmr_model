@@ -1,0 +1,75 @@
+<meta charset="utf-8">
+		
+		
+<div ng-app="myApp" ng-controller="mainController" >
+<div class="container-fluid">
+	
+	<div class="row">
+
+			<div class="col-sm-3" ng-controller="modelController">
+				<div animation model="spinStructure" speed=20 style="height: 800px; width: 500px;"> </div>
+				Phase periods: <input ng-model="params.phasePeriods" type="number"></input><br>
+				Conical periods: <input ng-model="params.conicalPeriods" type="number"></input>
+			</div>
+	
+			<div class="col-sm-3" ng-controller="modelController">
+				<div animation model="spinStructure" speed=30 style="height: 800px; width: 500px;"> </div>
+				Phase periods: <input ng-model="params.phasePeriods" type="number"></input><br>
+				Conical periods: <input ng-model="params.conicalPeriods" type="number"></input>
+			</div>
+
+			<div class="col-sm-3" ng-controller="modelController">
+				<div animation model="spinStructure" speed=40 style="height: 800px; width: 500px;"> </div>
+				Phase periods: <input ng-model="params.phasePeriods" type="number"></input><br>
+				Conical periods: <input ng-model="params.conicalPeriods" type="number"></input>
+			</div>
+	</div>
+
+
+<!--
+	<div class="row">
+		<div class="col-sm-4">
+			<div colormap delay="delay" model="fftStructure" options="dfmrOptions" idx=6> </div>
+		</div>
+		<div class="col-sm-4">
+			<div colormap delay="delay" model="fftStructure" options="dfmrOptions" idx=8> </div>
+		</div>
+		<div class="col-sm-4">
+			<div colormap delay="delay" model="fftStructure" options="dfmrOptions" idx=10> </div>
+		</div>
+	</div>
+-->	
+
+	
+</div>
+</div>
+
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/angularjs-slider/7.0.0/rzslider.min.css">
+<link rel="stylesheet" href="styles.css">
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+
+
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angularjs-slider/7.0.0/rzslider.min.js"></script>
+
+<script src="https://d3js.org/d3.v5.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/110/three.min.js"></script>
+<script src="./TrackballControls.js"></script>
+<script src="./OrbitControls.js"></script>
+<script src="./Detector.js"></script>
+<script src="./fft.js"></script>
+
+<script>
+	var app = angular.module('myApp', ['rzSlider']);
+</script>
+
+<script src="./colormapDirective.js"></script>
+<script src="./animationDirective.js"></script>
+<script src="./js.js"></script>

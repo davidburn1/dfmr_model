@@ -4,8 +4,18 @@ app.directive('animation', ['$window', function ($window) {
 		scope.timeStep = 5;
 		scope.tickCounter = 0;
 
+		scope.annotations = [];
+		scope.controls;
+		scope.renderer;
+		scope.scene;
+		scope.camera;
+		scope.arrows;
+
         scope.$watch('model', function (newVal) {
-			drawCircles(scope.model);
+			scope.scene.remove(scope.annotations); 
+			scope.annotations = drawCircles(scope.model);
+			scope.scene.add(scope.annotations);
+			
 		}, true);
 
 		
@@ -15,15 +25,52 @@ app.directive('animation', ['$window', function ($window) {
 				if (scope.tickCounter >= (100/scope.speed)){
 					scope.tickCounter = 0;
 					scope.timeStep = (scope.timeStep  + 1) % scope.model.length;
-					showStructure( scope.model, scope.timeStep);
+					scope.updateArrowDirection( scope.model, scope.timeStep);
 				}
 			}
-			controls.update();
-			renderer.render( scene, camera );
+			scope.controls.update();
+			scope.renderer.render( scope.scene, scope.camera );
 		}
 
+
+
+		
+		scope.updateArrowDirection = function(spinStructure, timeStep) {
+			for (i = 0; i < scope.arrows.children.length; i++ ) { 
+				scope.arrows.children[i].setDirection(spinStructure[timeStep][i]);
+			}
+		}	
+
+
+		scope.init = function(){
+			container = element[0];
+			scope.camera = new THREE.PerspectiveCamera( 50, container.offsetWidth/container.offsetHeight, 0.01, 1e10 );  //distance , 
+			scope.camera.position.set( 10, 10, 10);		
+			scope.camera.up.set( 0, 0, 1 );
+			scope.camera.lookAt( 0,0, 0);
+		
+			scope.controls = new THREE.TrackballControls(scope.camera, container );
+			scope.controls.dynamicDampingFactor = 0.5;
+			scope.controls.rotateSpeed = 5;
+			scope.scene = new THREE.Scene();
+			scope.scene.add( scope.camera );
+		
+			scope.arrows = drawArrows();
+			scope.scene.add(scope.arrows);
+
+			scope.renderer = new THREE.WebGLRenderer( { antialias: true } );
+			scope.renderer.setPixelRatio( window.devicePixelRatio );
+			scope.renderer.setSize(container.offsetWidth, container.offsetHeight );
+			scope.renderer.setClearColor( 0xffffff, 1);
+			container.appendChild( scope.renderer.domElement );
+
+			scope.scene.add(drawAxes())
+
+		}
+
+
 		element.html("");
-		initAnimation(element[0]);
+		scope.init();
 		setInterval(scope.tick, 10);
 	}
 
@@ -38,57 +85,23 @@ app.directive('animation', ['$window', function ($window) {
 
 
 
-var container;
-var camera, controls, scene, renderer;
-
-var circles;
-var arrows;
+//var camera, controls, scene, renderer;
 
 var gridSize = [1,1,16];
-
-
 var translateToCenter = new THREE.Matrix4().makeTranslation( -(gridSize[0]-1)/2,-(gridSize[1]-1)/2,-(gridSize[2]-1)/2)
 
 
 
-
-function initAnimation( container ) {
-	camera = new THREE.PerspectiveCamera( 50, container.offsetWidth/container.offsetHeight, 0.01, 1e10 );  //distance , 
-	camera.position.set( 10, 10, 10);		
-	camera.up.set( 0, 0, 1 );
-	camera.lookAt( 0,0, 0);
-
-	controls = new THREE.TrackballControls( camera, container );
-	controls.dynamicDampingFactor = 0.5;
-	controls.rotateSpeed = 5;
-	scene = new THREE.Scene();
-	scene.add( camera );
-
-	drawArrows();
-
-	
-
-	renderer = new THREE.WebGLRenderer( { antialias: true } );
-	renderer.setPixelRatio( window.devicePixelRatio );
-	renderer.setSize(container.offsetWidth, container.offsetHeight );
-	renderer.setClearColor( 0xffffff, 1);
-	container.appendChild( renderer.domElement );
-	
-	// axes arrows
+function drawAxes(){
+	axes = new THREE.Group();
 	arrow = new THREE.ArrowHelper(new THREE.Vector3(1,0,0), new THREE.Vector3(0,0,0), 5, 0xff0000, 0.5, 0.4);
-	scene.add(arrow);
+	axes.add(arrow);
 	arrow = new THREE.ArrowHelper(new THREE.Vector3(0,1,0), new THREE.Vector3(0,0,0), 5, 0x00ff00, 0.5, 0.4);
-	scene.add(arrow);
+	axes.add(arrow);
 	arrow = new THREE.ArrowHelper(new THREE.Vector3(0,0,1), new THREE.Vector3(0,0,0), 5, 0x0000ff, 0.5, 0.4);
-	scene.add(arrow);
-
-
+	axes.add(arrow);
+	return axes;
 }
-
-
-
-
-
 
 
 
@@ -103,17 +116,16 @@ function drawArrows(){
 		arrows.add(arrow);
 	}}}
 	arrows.applyMatrix(translateToCenter); // move to rotation center
-	scene.add(arrows);
+	return arrows
 }
 
 
-function showStructure(spinStructure, timeStep) {
-	for (i = 0; i < arrows.children.length; i++ ) { 
-		arrows.children[i].setDirection(spinStructure[timeStep][i]);
-	}
-}	
+
 
 	
+
+
+
 function circle(r, color){
 	var lineGeometry = new THREE.Geometry();
 	var vertArray = lineGeometry.vertices;
@@ -123,16 +135,17 @@ function circle(r, color){
 	lineGeometry.computeLineDistances();
 	var lineMaterial = new THREE.LineBasicMaterial({ color: color });
 	var circle = new THREE.Line(lineGeometry, lineMaterial);
-
 	return circle;
 }
 
 	
 function drawCircles(spinStructure) {
-	scene.remove(circles); 
-	circles = new THREE.Group();
+	annotations = new THREE.Group();
 
 	if (spinStructure.length == 0) {return;}
+
+	var centersLineGeometry = new THREE.Geometry();
+	var centersVertArray = centersLineGeometry.vertices;
 
 	for (z = 0; z < gridSize[2]; z++) { 
 	for (y = 0; y < gridSize[1]; y++) { 
@@ -151,26 +164,44 @@ function drawCircles(spinStructure) {
 		//translation = new THREE.Matrix4().makeTranslation(x,y,z);	// translate to position of spin
 		//circ.applyMatrix(translation);
 		//circles.add( circ );
+	
 
-
+		
 
 		// dynamic circles
 		var lineGeometry = new THREE.Geometry();
 		var vertArray = lineGeometry.vertices;
+		circleCenter = [0,0,0];
 		for (var i=0; i < spinStructure.length; i++) { // loop through time steps
 			vertArray.push(spinStructure[i][z]);
+			circleCenter[0] += spinStructure[i][z]['x'];
+			circleCenter[1] += spinStructure[i][z]['y'];
+			circleCenter[2] += spinStructure[i][z]['z'];
 		}
 		vertArray.push(spinStructure[0][z]); 		// add first point agian to join up the path
-		lineGeometry.computeLineDistances();
+
 		var lineMaterial = new THREE.LineBasicMaterial({ color: 0xff0000 });
 		var circ = new THREE.Line(lineGeometry, lineMaterial);
 
 		transformation = new THREE.Matrix4().makeTranslation(x,y,z);
-		circ.applyMatrix(transformation);					// translate to position of spin
-		circles.add( circ );
 
+
+		circleCenter[0] /= spinStructure.length;
+		circleCenter[1] /= spinStructure.length;
+		circleCenter[2] /= spinStructure.length;
+		centersVertArray.push(new THREE.Vector3(circleCenter[0]+x, circleCenter[1]+y, circleCenter[2]+z));
+
+
+		circ.applyMatrix(transformation);					// translate to position of spin
+		annotations.add( circ );
 	}}}
-			
-	circles.applyMatrix(translateToCenter);
-	scene.add(circles);
+
+	var lineMaterial = new THREE.LineBasicMaterial({ color: 0x00ff00 });
+	var centerLine = new THREE.Line(centersLineGeometry, lineMaterial);
+	annotations.add( centerLine );
+
+	annotations.applyMatrix(translateToCenter);
+	return annotations;
 }
+
+
