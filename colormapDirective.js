@@ -166,8 +166,8 @@ function ColormapPlot(id, data){
 	var myColor = d3.scaleSequential()
 	.interpolator(d3.interpolateRdYlBu)
 //		.interpolator(d3.interpolateInferno)
-	//.domain(d3.extent(data, function(d) { return d.value; }));
-	.domain([-1,1]);
+	.domain(d3.extent(data, function(d) { return d.value; }));
+	//.domain([-1,1]);
 	
 
 // add the squares
