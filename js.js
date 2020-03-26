@@ -52,10 +52,6 @@ app.controller('mainController', function($scope) {
 		drawCircles();
     }, true);
 
-
-
-	
-
 	$scope.$watch('timeStep', function (newVal) {
 		showStructure(arrows, $scope.spinStructure[$scope.timeStep]);
 	}, true);
