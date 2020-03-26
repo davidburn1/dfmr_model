@@ -8,7 +8,7 @@ app.directive('animation', ['$window', function ($window) {
 		scope.controls;
 		scope.renderer;
 		scope.scene;
-		scope.camera;
+		//scope.camera;
 		scope.arrows;
 
         scope.$watch('model', function (newVal) {
@@ -29,7 +29,7 @@ app.directive('animation', ['$window', function ($window) {
 				}
 			}
 			scope.controls.update();
-			scope.renderer.render( scope.scene, scope.camera );
+			scope.renderer.render( scope.scene, camera );
 		}
 
 
@@ -44,16 +44,16 @@ app.directive('animation', ['$window', function ($window) {
 
 		scope.init = function(){
 			container = element[0];
-			scope.camera = new THREE.PerspectiveCamera( 50, container.offsetWidth/container.offsetHeight, 0.01, 1e10 );  //distance , 
-			scope.camera.position.set( 10, 10, 10);		
-			scope.camera.up.set( 0, 0, 1 );
-			scope.camera.lookAt( 0,0, 0);
+			camera = new THREE.PerspectiveCamera( 50, container.offsetWidth/container.offsetHeight, 0.01, 1e10 );  //distance , 
+			camera.position.set( 10, 10, 10);		
+			camera.up.set( 0, 0, 1 );
+			camera.lookAt( 0,0, 0);
 		
-			scope.controls = new THREE.TrackballControls(scope.camera, container );
+			scope.controls = new THREE.TrackballControls(camera, container );
 			scope.controls.dynamicDampingFactor = 0.5;
 			scope.controls.rotateSpeed = 5;
 			scope.scene = new THREE.Scene();
-			scope.scene.add( scope.camera );
+			scope.scene.add( camera );
 		
 			scope.arrows = drawArrows();
 			scope.scene.add(scope.arrows);
@@ -85,7 +85,8 @@ app.directive('animation', ['$window', function ($window) {
 
 
 
-//var camera, controls, scene, renderer;
+var camera
+//controls, scene, renderer;
 
 var gridSize = [1,1,16];
 var translateToCenter = new THREE.Matrix4().makeTranslation( -(gridSize[0]-1)/2,-(gridSize[1]-1)/2,-(gridSize[2]-1)/2)

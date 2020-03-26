@@ -31,17 +31,15 @@ app.controller('modelController', function($scope) {
 	$scope.dfmrOptions = {};
 	$scope.dfmrOptions['th'] = 45;
 
-
-
-	//$scope.delayIndex = 0;
 	$scope.delay = [];
 	for (i = 0; i < 360; i=i+10) {
 		$scope.delay.push(i);
 	} 
 
 	$scope.spinStructure =  [];
-	$scope.structureArray =  [];
 	$scope.fftStructure = [];
+
+	$scope.structureArray =  [];
 
 
 	$scope.$watch('params', function (newVal) {
@@ -55,7 +53,7 @@ app.controller('modelController', function($scope) {
 	$scope.processStructure = function() {
 		for (i = 0; i < $scope.delay.length; i++) { 
 			// for each delay step
-			$scope.spinStructure[i] =  $scope.calculateStructure($scope.delay[i]);
+			$scope.spinStructure[i] = $scope.calculateStructure($scope.delay[i]);
 			$scope.fftStructure[i] = $scope.calculateFftStructure($scope.spinStructure[i]);
 		}
 	}

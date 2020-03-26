@@ -6,39 +6,68 @@
 	
 	<div class="row">
 
-			<div class="col-sm-3" ng-controller="modelController">
-				<div animation model="spinStructure" speed=20 style="height: 800px; width: 500px;"> </div>
-				Phase periods: <input ng-model="params.phasePeriods" type="number"></input><br>
-				Conical periods: <input ng-model="params.conicalPeriods" type="number"></input>
+			<div class="col-sm-2" ng-controller="modelController">
+				Phase periods: <input class="form-control" ng-model="params.phasePeriods" type="number"></input><br>
+				Conical periods: <input class="form-control" ng-model="params.conicalPeriods" type="number"></input><br>
+				<div animation model="spinStructure" speed=20 style="height: 600px; width:100%;"> </div><br>
+				
+				<div colormap delay="delay" model="fftStructure" options="dfmrOptions" idx=6> </div><br>
+				<div colormap delay="delay" model="fftStructure" options="dfmrOptions" idx=8> </div><br>
+				<div colormap delay="delay" model="fftStructure" options="dfmrOptions" idx=10> </div>
 			</div>
 	
-			<div class="col-sm-3" ng-controller="modelController">
-				<div animation model="spinStructure" speed=30 style="height: 800px; width: 500px;"> </div>
-				Phase periods: <input ng-model="params.phasePeriods" type="number"></input><br>
-				Conical periods: <input ng-model="params.conicalPeriods" type="number"></input>
+			<div class="col-sm-2" ng-controller="modelController">
+				Phase periods: <input class="form-control" ng-model="params.phasePeriods" type="number"></input><br>
+				Conical periods: <input class="form-control" ng-model="params.conicalPeriods" type="number"></input><br>
+				<div animation model="spinStructure" speed=20 style="height: 600px; width:100%;"> </div><br>
+				
+				<div colormap delay="delay" model="fftStructure" options="dfmrOptions" idx=6> </div><br>
+				<div colormap delay="delay" model="fftStructure" options="dfmrOptions" idx=8> </div><br>
+				<div colormap delay="delay" model="fftStructure" options="dfmrOptions" idx=10> </div>
 			</div>
 
-			<div class="col-sm-3" ng-controller="modelController">
-				<div animation model="spinStructure" speed=40 style="height: 800px; width: 500px;"> </div>
-				Phase periods: <input ng-model="params.phasePeriods" type="number"></input><br>
-				Conical periods: <input ng-model="params.conicalPeriods" type="number"></input>
+			<div class="col-sm-2" ng-controller="modelController">
+				Phase periods: <input class="form-control" ng-model="params.phasePeriods" type="number"></input><br>
+				Conical periods: <input class="form-control" ng-model="params.conicalPeriods" type="number"></input><br>
+				<div animation model="spinStructure" speed=20 style="height: 600px; width:100%;"> </div><br>
+				
+				<div colormap delay="delay" model="fftStructure" options="dfmrOptions" idx=6> </div><br>
+				<div colormap delay="delay" model="fftStructure" options="dfmrOptions" idx=8> </div><br>
+				<div colormap delay="delay" model="fftStructure" options="dfmrOptions" idx=10> </div>
 			</div>
-	</div>
 
+			<div class="col-sm-2" ng-controller="modelController">
+				Phase periods: <input class="form-control" ng-model="params.phasePeriods" type="number"></input><br>
+				Conical periods: <input class="form-control" ng-model="params.conicalPeriods" type="number"></input><br>
+				<div animation model="spinStructure" speed=20 style="height: 600px; width:100%;"> </div><br>
+				
 
-<!--
-	<div class="row">
-		<div class="col-sm-4">
-			<div colormap delay="delay" model="fftStructure" options="dfmrOptions" idx=6> </div>
-		</div>
-		<div class="col-sm-4">
-			<div colormap delay="delay" model="fftStructure" options="dfmrOptions" idx=8> </div>
-		</div>
-		<div class="col-sm-4">
-			<div colormap delay="delay" model="fftStructure" options="dfmrOptions" idx=10> </div>
-		</div>
+				<div colormap delay="delay" model="fftStructure" options="dfmrOptions" idx=6> </div><br>
+				<div colormap delay="delay" model="fftStructure" options="dfmrOptions" idx=8> </div><br>
+				<div colormap delay="delay" model="fftStructure" options="dfmrOptions" idx=10> </div>
+			</div>
+
+			<div class="col-sm-2" ng-controller="modelController">
+				Phase periods: <input class="form-control" ng-model="params.phasePeriods" type="number"></input><br>
+				Conical periods: <input class="form-control" ng-model="params.conicalPeriods" type="number"></input><br>
+				<div animation model="spinStructure" speed=20 style="height: 600px; width:100%;"> </div><br>
+
+				<div colormap delay="delay" model="fftStructure" options="dfmrOptions" idx=6> </div><br>
+				<div colormap delay="delay" model="fftStructure" options="dfmrOptions" idx=8> </div><br>
+				<div colormap delay="delay" model="fftStructure" options="dfmrOptions" idx=10> </div>
+			</div>
+
+			<div class="col-sm-2" ng-controller="modelController">
+				Phase periods: <input class="form-control" ng-model="params.phasePeriods" type="number"></input><br>
+				Conical periods: <input class="form-control" ng-model="params.conicalPeriods" type="number"></input><br>
+				<div animation model="spinStructure" speed=20 style="height: 600px; width:100%;"> </div><br>
+				
+				<div colormap delay="delay" model="fftStructure" options="dfmrOptions" idx=6> </div><br>
+				<div colormap delay="delay" model="fftStructure" options="dfmrOptions" idx=8> </div><br>
+				<div colormap delay="delay" model="fftStructure" options="dfmrOptions" idx=10> </div>
+			</div>
+
 	</div>
--->	
 
 	
 </div>
