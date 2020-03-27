@@ -1,31 +1,6 @@
-app.controller('mainController', function($scope) {
-
-});
-
-
-
 app.controller('modelController', function($scope) {
 
 	$scope.gridSize = [1,1,16];
-	$scope.circlesGridSize = [1,1,16];
-	
-
-	if (localStorage.getItem("params") === null) {
-		// default spin structure params
-		$scope.params = {};
-		$scope.params.tiltY = 0;
-		$scope.params.tiltZ = 0;
-		$scope.params.zeeman = 0;
-		$scope.params.conicalPeriods = 2; // in z direction
-		$scope.params.phasePeriods = 0;
-		$scope.params.hallA = 10;
-		$scope.params.hallB = 10;
-
-		$scope.params.hallPeriodsA = 0;
-		$scope.params.hallPeriodsB = 0;
-	} else {
-		$scope.params = JSON.parse(localStorage.getItem('params'));
-	}
 
 	// dfmr params
 	$scope.dfmrOptions = {};
@@ -39,11 +14,7 @@ app.controller('modelController', function($scope) {
 	$scope.spinStructure =  [];
 	$scope.fftStructure = [];
 
-	$scope.structureArray =  [];
-
-
 	$scope.$watch('params', function (newVal) {
-		localStorage.setItem('params', JSON.stringify($scope.params));
 		$scope.processStructure();
     }, true);
 
@@ -122,32 +93,7 @@ app.controller('modelController', function($scope) {
 		
 		
 
-	$scope.structureToArray = function(){
-		// convert three vectors into normal arrays
-		var out = [];
-		for (i=0; i < $scope.spinStructure.length; i++) { // loop through delay
-			out[i] = [];
-			for (j=0; j < $scope.spinStructure[i].length; j++) { // loop through space
-				out[i][j] = [$scope.spinStructure[i][j]['x'], $scope.spinStructure[i][j]['y'], $scope.spinStructure[i][j]['z']]
-			}
-		}
-		$scope.structureArray = JSON.stringify(out);
-	}	
 
-	$scope.loadStructure = function() {
-		// convert array back into the three vector array
-		$scope.spinStructure = JSON.parse($scope.structureArray);
-		for (i = 0; i < $scope.spinStructure.length; i++) { 
-			for (j=0; j < $scope.spinStructure[i].length; j++) { 
-				$scope.spinStructure[i][j] = new THREE.Vector3( $scope.spinStructure[i][j][0], $scope.spinStructure[i][j][1], $scope.spinStructure[i][j][2] )
-			}
-		}
-
-		for (i = 0; i < $scope.spinStructure.length; i++) { 
-			$scope.fftStructure[i] = fftStructure($scope.spinStructure[i]);
-		}
-		drawCircles();
-	};
 
 	
 	//function onWindowResize() {

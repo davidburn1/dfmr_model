@@ -2,6 +2,8 @@
 		
 		
 <div ng-app="myApp" ng-controller="mainController" >
+<div ng-controller="modelController" >
+
 <div class="container-fluid">
 	
 	<div class="row">
@@ -62,7 +64,7 @@
 			<div class="row">
 				<div class="col-sm-12 text-right">
 					<textarea id="structureTextarea" ng-model="structureArray"  class="form-control" style="min-width: 100%"></textarea>
-					<button onClick="copyStructure()">copy</button>
+					<button ng-click="copyStructure()">copy</button>
 					<button ng-click="loadStructure()">load</button>
 				</div>
 			</div>
@@ -100,23 +102,19 @@
 	
 </div>
 </div>
+</div>
 
 
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/angularjs-slider/7.0.0/rzslider.min.css">
 <link rel="stylesheet" href="styles.css">
 
-
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
 
-
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-
 <script src="https://cdnjs.cloudflare.com/ajax/libs/angularjs-slider/7.0.0/rzslider.min.js"></script>
-
 <script src="https://d3js.org/d3.v5.min.js"></script>
-
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/110/three.min.js"></script>
 
 <script src="./TrackballControls.js"></script>
@@ -124,17 +122,86 @@
 <script src="./Detector.js"></script>
 <script src="./fft.js"></script>
 
-
 <script>
-	function copyStructure(){
-			var copyText = document.getElementById("structureTextarea");
-			copyText.select();
-			document.execCommand("copy");
-		}
-	
 	var app = angular.module('myApp', ['rzSlider']);
 </script>
+
 
 <script src="./colormapDirective.js"></script>
 <script src="./animationDirective.js"></script>
 <script src="./js.js"></script>
+
+
+
+<script>
+	
+	app.controller('mainController', function($scope) {
+
+		if (localStorage.getItem("params") === null) {
+			// default spin structure params
+			$scope.params = {};
+			$scope.params.tiltY = 0;
+			$scope.params.tiltZ = 0;
+			$scope.params.zeeman = 0;
+			$scope.params.conicalPeriods = 2; // in z direction
+			$scope.params.phasePeriods = 0;
+			$scope.params.hallA = 10;
+			$scope.params.hallB = 10;
+
+			$scope.params.hallPeriodsA = 0;
+			$scope.params.hallPeriodsB = 0;
+		} else {
+			$scope.params = JSON.parse(localStorage.getItem('params'));
+		}
+
+
+
+		$scope.$watch('params', function (newVal) {
+			localStorage.setItem('params', JSON.stringify($scope.params));
+		}, true);
+
+
+
+
+
+		
+		$scope.loadStructure = function() {
+			// convert array back into the three vector array
+
+			var textBox = document.getElementById("structureTextarea");
+
+			$scope.spinStructure = JSON.parse(textBox.innerHTML);
+			for (i = 0; i < $scope.spinStructure.length; i++) { 
+				for (j=0; j < $scope.spinStructure[i].length; j++) { 
+					$scope.spinStructure[i][j] = new THREE.Vector3( $scope.spinStructure[i][j][0], $scope.spinStructure[i][j][1], $scope.spinStructure[i][j][2] )
+				}
+			}
+
+			for (i = 0; i < $scope.spinStructure.length; i++) { 
+				$scope.fftStructure[i] = fftStructure($scope.spinStructure[i]);
+			}
+			//drawCircles();
+		};
+
+		$scope.copyStructure = function(){
+			//convert three vectors into normal arrays
+			var out = [];
+			for (i=0; i < $scope.spinStructure.length; i++) { // loop through delay
+				out[i] = [];
+				for (j=0; j < $scope.spinStructure[i].length; j++) { // loop through space
+					out[i][j] = [$scope.spinStructure[i][j]['x'], $scope.spinStructure[i][j]['y'], $scope.spinStructure[i][j]['z']]
+				}
+			}
+			//$scope.structureArray = JSON.stringify(out);
+
+			var textBox = document.getElementById("structureTextarea");
+			textBox.innerHTML = JSON.stringify(out);
+			textBox.select();
+			document.execCommand("copy");
+
+			
+		}
+
+	});
+</script>
+
