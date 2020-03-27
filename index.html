@@ -63,7 +63,7 @@
 
 			<div class="row">
 				<div class="col-sm-12 text-right">
-					<textarea id="structureTextarea" ng-model="structureArray"  class="form-control" style="min-width: 100%"></textarea>
+					<textarea id="structureTextarea" ng-model="jsonStructure"  class="form-control" style="min-width: 100%"></textarea>
 					<button ng-click="copyStructure()">copy</button>
 					<button ng-click="loadStructure()">load</button>
 				</div>
@@ -156,15 +156,18 @@
 
 
 
+
+
 		$scope.$watch('params', function (newVal) {
 			localStorage.setItem('params', JSON.stringify($scope.params));
+			
 		}, true);
 
 
 
 
 
-		
+
 		$scope.loadStructure = function() {
 			// convert array back into the three vector array
 
@@ -184,22 +187,9 @@
 		};
 
 		$scope.copyStructure = function(){
-			//convert three vectors into normal arrays
-			var out = [];
-			for (i=0; i < $scope.spinStructure.length; i++) { // loop through delay
-				out[i] = [];
-				for (j=0; j < $scope.spinStructure[i].length; j++) { // loop through space
-					out[i][j] = [$scope.spinStructure[i][j]['x'], $scope.spinStructure[i][j]['y'], $scope.spinStructure[i][j]['z']]
-				}
-			}
-			//$scope.structureArray = JSON.stringify(out);
-
 			var textBox = document.getElementById("structureTextarea");
-			textBox.innerHTML = JSON.stringify(out);
 			textBox.select();
 			document.execCommand("copy");
-
-			
 		}
 
 	});

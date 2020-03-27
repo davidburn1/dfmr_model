@@ -13,9 +13,12 @@ app.controller('modelController', function($scope) {
 
 	$scope.spinStructure =  [];
 	$scope.fftStructure = [];
+	$scope.jsonStructure="";
+	
 
 	$scope.$watch('params', function (newVal) {
 		$scope.processStructure();
+		$scope.jsonStructure = $scope.structureToJson();
     }, true);
 
 
@@ -91,7 +94,19 @@ app.controller('modelController', function($scope) {
 		
 	
 		
-		
+
+	$scope.structureToJson = function(){
+		//convert three vectors into normal arrays
+		var out = [];
+		for (i=0; i < $scope.spinStructure.length; i++) { // loop through delay
+			out[i] = [];
+			for (j=0; j < $scope.spinStructure[i].length; j++) { // loop through space
+				out[i][j] = [$scope.spinStructure[i][j]['x'], $scope.spinStructure[i][j]['y'], $scope.spinStructure[i][j]['z']]
+			}
+		}
+		return JSON.stringify(out);
+	}
+
 
 
 
