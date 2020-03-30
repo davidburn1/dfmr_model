@@ -38,6 +38,7 @@ app.controller('modelController', function($scope) {
 
 	
 	$scope.calculateStructure = function(timeStep){
+		// timestep varies from 0 -> 360
 		vectors = Array();
 		for (z = 0; z < $scope.gridSize[2]; z++) { 
 		for (y = 0; y < $scope.gridSize[1]; y++) { 
@@ -46,17 +47,28 @@ app.controller('modelController', function($scope) {
 			// start with magnetisation pointing along z axis
 			var v0 = new THREE.Vector3( 0, 0, 1 );
 			
-			// dynamics
-			var phaseStep = 2*Math.PI* $scope.params.phasePeriods * z /$scope.gridSize[2] + timeStep/180*Math.PI; 	// provides an angle
-			var aa = $scope.params.hallA;// * Math.sin(2*Math.PI* $scope.params.hallPeriodsA * z /$scope.gridSize[2]);
-			var bb = $scope.params.hallB * Math.cos(2*Math.PI* $scope.params.hallPeriodsB  * z /$scope.gridSize[2]);
-			v0.applyAxisAngle( new THREE.Vector3( 1, 0, 0 ), Math.PI/180 * aa  * Math.sin(phaseStep));			// rotate about x 
-			v0.applyAxisAngle( new THREE.Vector3( 0, 1, 0 ), Math.PI/180 * bb  * Math.cos(phaseStep));			// rotate about y
-
-			// make ellipse
-			// modulate size by a parameter that can be given a number of repeats and phase to the structuring.
-
 			
+			
+			// dynamic amplitude 
+			// amplitude depends on hallAB with periodic modulation along the the length of the spin chain.
+			var ampA = 5+ $scope.params.hallA * Math.abs(Math.cos(2*Math.PI*$scope.params.hallPeriodsA/2 * z/$scope.gridSize[2])); 
+			var ampB = 5+ $scope.params.hallB * Math.abs(Math.cos(2*Math.PI*$scope.params.hallPeriodsB/2 * z/$scope.gridSize[2]));
+// artificial offset
+
+			// dynamic phase
+			var phaseAngle = (timeStep/180*Math.PI) + (2*Math.PI*$scope.params.phasePeriods * z/$scope.gridSize[2]); 	// time dependent + position dependent phase
+			aa = ampA * Math.sin(phaseAngle)
+			bb = ampB * Math.cos(phaseAngle)
+
+			// give a rotation in x an y axes for the vectors initially pointing along z
+			v0.applyAxisAngle( new THREE.Vector3( 1, 0, 0 ), Math.PI/180*aa );			//  x component
+			v0.applyAxisAngle( new THREE.Vector3( 0, 1, 0 ), Math.PI/180*bb );			//  y component
+
+			//rotate by phase dependent z rotation
+			v0.applyAxisAngle( new THREE.Vector3( 0, 0, 1 ), 0 );			//  z rotation component
+
+
+
 			v0.applyAxisAngle( new THREE.Vector3( 1, 0, 0 ), (90-$scope.params.zeeman)*Math.PI/180 )			// rotate by 90 degrees - zeeman about x axis
 
 
@@ -67,6 +79,9 @@ app.controller('modelController', function($scope) {
 			
 			v0.applyAxisAngle( new THREE.Vector3( 0, 1, 0 ), ($scope.params.tiltY * Math.PI / 180));				// rotate about y by tilt angle
 			v0.applyAxisAngle( new THREE.Vector3( 0, 0, 1 ), ($scope.params.tiltZ * Math.PI / 180));				// rotate about z by tilt angle
+
+
+			// introduce squashing to represent surface effects
 			
 			vectors = vectors.concat(v0);
 		}}}

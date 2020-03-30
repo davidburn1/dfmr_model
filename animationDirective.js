@@ -66,6 +66,21 @@ app.directive('animation', ['$window', function ($window) {
 
 			scope.scene.add(drawAxes())
 
+
+
+
+
+
+			var light = new THREE.AmbientLight( 0x666666 ); // soft white light
+			scope.scene.add( light );
+
+			var pointLight = new THREE.PointLight( 0x666666, 1, 0 );
+			pointLight.position.set( 0, 0, 10 );
+			scope.scene.add( pointLight );
+
+
+
+
 		}
 
 
@@ -95,12 +110,35 @@ var translateToCenter = new THREE.Matrix4().makeTranslation( -(gridSize[0]-1)/2,
 
 function drawAxes(){
 	axes = new THREE.Group();
-	arrow = new THREE.ArrowHelper(new THREE.Vector3(1,0,0), new THREE.Vector3(0,0,0), 5, 0xff0000, 0.5, 0.4);
+	//arrow = new THREE.ArrowHelper(new THREE.Vector3(1,0,0), new THREE.Vector3(0,0,0), 5, 0xff0000, 0.5, 0.4);
+	//axes.add(arrow);
+	//arrow = new THREE.ArrowHelper(new THREE.Vector3(0,1,0), new THREE.Vector3(0,0,0), 5, 0x00ff00, 0.5, 0.4);
+	//axes.add(arrow);
+	//arrow = new THREE.ArrowHelper(new THREE.Vector3(0,0,1), new THREE.Vector3(0,0,0), 5, 0x0000ff, 0.5, 0.4);
+	//axes.add(arrow);
+
+	arrow = new THREE.ArrowHelper(new THREE.Vector3(0,0,1), new THREE.Vector3(0,0,0), gridSize[2], 0xffffff, 0.5, 0.4);
+
+	arrow.cone.geometry = new THREE.ConeGeometry( 0.5, 1, 16 );
+	//arrow.line.geometry = new THREE.CylinderBufferGeometry( 0.02, 0.02, 1, 16 );
+
+	var tt = new THREE.Matrix4().makeTranslation( 0,-0.5,0)
+	arrow.cone.geometry.applyMatrix(tt); // move to rotation center
+	//var tt = new THREE.Matrix4().makeTranslation( 0,0.5,0)
+	//arrow.line.geometry.applyMatrix(tt); // move to rotation center
+
+
+
+	var material = new THREE.MeshLambertMaterial({
+		color: 0x0000ff
+	  });
+	arrow.cone.material = material;
+	arrow.line.material = material;
+
+	arrow.applyMatrix(translateToCenter); // move to rotation center
 	axes.add(arrow);
-	arrow = new THREE.ArrowHelper(new THREE.Vector3(0,1,0), new THREE.Vector3(0,0,0), 5, 0x00ff00, 0.5, 0.4);
-	axes.add(arrow);
-	arrow = new THREE.ArrowHelper(new THREE.Vector3(0,0,1), new THREE.Vector3(0,0,0), 5, 0x0000ff, 0.5, 0.4);
-	axes.add(arrow);
+
+
 	return axes;
 }
 
@@ -112,13 +150,42 @@ function drawArrows(){
 	for (z = 0; z < gridSize[2]; z++) { 
 	for (y = 0; y < gridSize[1]; y++) { 
 	for (x = 0; x < gridSize[0]; x++) { 
+		
 		var arrow = new THREE.ArrowHelper(new THREE.Vector3(0,0,0), new THREE.Vector3( x,y,z ), 1, 0xffffff, 0.5, 0.4);
-		arrow.setColor(new THREE.Color( 0x000000 ));
+		//arrow.setColor(new THREE.Color( 0xffffff ));
+
+
+		arrow.cone.geometry = new THREE.ConeGeometry( 0.5, 1, 16 );
+		arrow.line.geometry = new THREE.CylinderBufferGeometry( 0.02, 0.02, 1, 16 );
+		//console.log(arrow.line.geometry);
+
+		var tt = new THREE.Matrix4().makeTranslation( 0,-0.5,0)
+		arrow.cone.geometry.applyMatrix(tt); // move to rotation center
+		var tt = new THREE.Matrix4().makeTranslation( 0,0.5,0)
+		arrow.line.geometry.applyMatrix(tt); // move to rotation center
+
+
+		var material = new THREE.MeshLambertMaterial({
+			color: 0xffffff,
+			wireframe: false
+		  });
+		arrow.cone.material = material;
+		arrow.line.material = material;
+
+
 		arrows.add(arrow);
 	}}}
+
+
+
+
+
 	arrows.applyMatrix(translateToCenter); // move to rotation center
 	return arrows
 }
+
+
+
 
 
 
