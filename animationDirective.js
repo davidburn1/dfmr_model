@@ -194,17 +194,17 @@ function drawArrows(){
 
 
 
-function circle(r, color){
-	var lineGeometry = new THREE.Geometry();
-	var vertArray = lineGeometry.vertices;
-	for (var i=0; i < 2*Math.PI; i+=0.01) {
-		vertArray.push(new THREE.Vector3(r * Math.cos(i), r * Math.sin(i), 0));
-	}
-	lineGeometry.computeLineDistances();
-	var lineMaterial = new THREE.LineBasicMaterial({ color: color });
-	var circle = new THREE.Line(lineGeometry, lineMaterial);
-	return circle;
-}
+// function circle(r, color){
+// 	var lineGeometry = new THREE.Geometry();
+// 	var vertArray = lineGeometry.vertices;
+// 	for (var i=0; i < 2*Math.PI; i+=0.01) {
+// 		vertArray.push(new THREE.Vector3(r * Math.cos(i), r * Math.sin(i), 0));
+// 	}
+// 	//lineGeometry.computeLineDistances();
+// 	var lineMaterial = new THREE.LineBasicMaterial({ color: color });
+// 	var circle = new THREE.Line(lineGeometry, lineMaterial);
+// 	return circle;
+// }
 
 	
 function drawCircles(spinStructure) {
@@ -212,6 +212,10 @@ function drawCircles(spinStructure) {
 
 	if (spinStructure.length == 0) {return;}
 
+
+
+
+	var curve = new THREE.CatmullRomCurve3( [] );
 	var centersLineGeometry = new THREE.Geometry();
 	var centersVertArray = centersLineGeometry.vertices;
 
@@ -258,15 +262,26 @@ function drawCircles(spinStructure) {
 		circleCenter[1] /= spinStructure.length;
 		circleCenter[2] /= spinStructure.length;
 		centersVertArray.push(new THREE.Vector3(circleCenter[0]+x, circleCenter[1]+y, circleCenter[2]+z));
+		curve.points.push(new THREE.Vector3(circleCenter[0]+x, circleCenter[1]+y, circleCenter[2]+z));
 
 
 		circ.applyMatrix(transformation);					// translate to position of spin
 		annotations.add( circ );
 	}}}
 
-	var lineMaterial = new THREE.LineBasicMaterial({ color: 0x00ff00 });
-	var centerLine = new THREE.Line(centersLineGeometry, lineMaterial);
-	annotations.add( centerLine );
+
+	
+	var points = curve.getPoints( 80 );
+	var geometry = new THREE.BufferGeometry().setFromPoints( points );
+	var material = new THREE.LineBasicMaterial( { linewidth:5, color : 0x00ff00, opacity:0.1 } );
+	//var material = new THREE.LineDashedMaterial( {linewidth: 1, color: 0x00ffff,scale: 1,dashSize: 3,gapSize: 1} );
+
+	var splineObject = new THREE.Line( geometry, material );
+	annotations.add( splineObject );
+
+	//var lineMaterial = new THREE.LineBasicMaterial({ color: 0x00ff00 });
+	//var centerLine = new THREE.Line(centersLineGeometry, lineMaterial);
+	//annotations.add( centerLine );
 
 	annotations.applyMatrix(translateToCenter);
 	return annotations;

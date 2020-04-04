@@ -20,32 +20,75 @@
 			</div>	
 			-->
 			<div class="row">
+				<div class="col-sm-3 text-right"><b>Tilt Y:</b></div> 
+				 <input class="col-sm-3 form-control" type="number" ng-model="params.tiltY" ></input> 
+				 <div class="col-sm-3 text-right"><b>Tilt Z:</b></div> 
+				 <input class="col-sm-3 form-control" type="number" ng-model="params.tiltZ" ></input> 
+			</div>	
+			<div class="row">
 				<div class="col-sm-3 text-right"><b>Zeeman angle:</b></div> 
-				<div class="col-sm-9"> <rzslider rz-slider-model="params.zeeman" rz-slider-options="{ceil:90, floor:-90}"></rzslider> </div>
+				<div class="col-sm-9"> <rzslider rz-slider-model="params.zeeman" rz-slider-options="{ceil:90, floor:-90, step:10}"></rzslider> </div>
 			</div>	
 			<div class="row">
 				<div class="col-sm-3 text-right"><b> Conical periods:</b></div> 
 				<div class="col-sm-9"> <rzslider rz-slider-model="params.conicalPeriods" rz-slider-options="{ceil:8, floor:-8}"></rzslider> </div>
 			</div>
+
+			<div class="row">
+				<div class="col-sm-3 text-right"><b> Conical periods2:</b></div> 
+				<rzslider class="col-sm-9" rz-slider-model="params.conicalPeriods2" rz-slider-options="{ceil:180, step:10}"></rzslider> 
+			</div>
+
+
+
 			<div class="row">
 				<div class="col-sm-3 text-right"><b> Phase periods:</b></div> 
 				<div class="col-sm-9"> <rzslider rz-slider-model="params.phasePeriods" rz-slider-options="{ceil:8, floor:-8}"></rzslider> </div>
 			</div>
+
+
+			<hr class="row"></hr>
+			<h2> Dynamic cone shape </h2>
+
 			<div class="row">
-				<div class="col-sm-3 text-right"><b> Cone angle a:</b></div> 
-				<div class="col-sm-9"> <rzslider rz-slider-model="params.hallA" rz-slider-options="{ceil:90}"></rzslider> </div>
+				<div class="col-sm-3 text-right"><b> Angle a:</b></div> 
+				<rzslider class="col-sm-9" rz-slider-model="params.hallAmpA" rz-slider-options="{ceil:90, step:10}"></rzslider>
 			</div>
 			<div class="row">
-				<div class="col-sm-3 text-right"><b> cone angle b:</b></div> 
-				<div class="col-sm-9"> <rzslider rz-slider-model="params.hallB" rz-slider-options="{ceil:90}"></rzslider> </div>
+				<div class="col-sm-3 text-right"><b> Angle b:</b></div> 
+				<rzslider class="col-sm-9" rz-slider-model="params.hallAmpB" rz-slider-options="{ceil:90, step:10}"></rzslider>
+			</div>
+
+			<div class="row">
+				<div class="col-sm-3 text-right"><b> Periodic Angle a:</b></div> 
+				<rzslider class="col-sm-9" rz-slider-model="params.hallAmpPeriodicA" rz-slider-options="{ceil:90, step:10}"></rzslider>
 			</div>
 			<div class="row">
-				<div class="col-sm-3 text-right"><b> cone periods a:</b></div> 
+				<div class="col-sm-3 text-right"><b> Periodic Angle b:</b></div> 
+				<rzslider class="col-sm-9" rz-slider-model="params.hallAmpPeriodicB" rz-slider-options="{ceil:90, step:10}"></rzslider>
+			</div>
+
+			<div class="row">
+				<div class="col-sm-3 text-right"><b> Periods a:</b></div> 
 				<div class="col-sm-9"> <rzslider rz-slider-model="params.hallPeriodsA" rz-slider-options="{ceil:8, floor:-8}"></rzslider> </div>
 			</div>
 			<div class="row">
-				<div class="col-sm-3 text-right"><b> cone periods b:</b></div> 
+				<div class="col-sm-3 text-right"><b> Periods b:</b></div> 
 				<div class="col-sm-9"> <rzslider rz-slider-model="params.hallPeriodsB" rz-slider-options="{ceil:8, floor:-8}"></rzslider> </div>
+			</div>
+
+			<div class="row">
+				<div class="col-sm-3 text-right"><b> cone rotation:</b></div> 
+				<div class="col-sm-9"> <rzslider rz-slider-model="params.coneRotation" rz-slider-options="{ceil:180, floor:-180, step:10}"></rzslider> </div>
+			</div>
+
+			<div class="row">
+				<p class="col-sm-3 text-right"><b> phase offset a:</b></p> 
+				<rzslider class="col-sm-9" rz-slider-model="params.phaseOffsetA" rz-slider-options="{ceil:180, floor:-180, step:10}"></rzslider>
+			</div>
+			<div class="row">
+				<p class="col-sm-3 text-right"><b> phase offset b:</b></p> 
+				<rzslider class="col-sm-9" rz-slider-model="params.phaseOffsetB" rz-slider-options="{ceil:180, floor:-180, step:10}"></rzslider>
 			</div>
 	
 						
@@ -137,21 +180,30 @@
 	
 	app.controller('mainController', function($scope) {
 
-		if (localStorage.getItem("params") === null) {
-			// default spin structure params
-			$scope.params = {};
-			$scope.params.tiltY = 0;
-			$scope.params.tiltZ = 0;
-			$scope.params.zeeman = 0;
-			$scope.params.conicalPeriods = 2; // in z direction
-			$scope.params.phasePeriods = 0;
-			$scope.params.hallA = 10;
-			$scope.params.hallB = 10;
+		$scope.params = {};
+		$scope.params.tiltY = 0;
+		$scope.params.tiltZ = 0;
+		$scope.params.zeeman = 0;
 
-			$scope.params.hallPeriodsA = 0;
-			$scope.params.hallPeriodsB = 0;
+		$scope.params.conicalPeriods = 2; // in z direction
+		$scope.params.conicalPeriods2 = 2; // in z direction
+		$scope.params.phasePeriods = 0;
+
+		$scope.params.hallAmpA = 10;
+		$scope.params.hallAmpB = 10;
+		$scope.params.hallAmpPeriodicA = 10;
+		$scope.params.hallAmpPeriodicB = 10;
+		$scope.params.hallPeriodsA = 0;
+		$scope.params.hallPeriodsB = 0;
+		$scope.params.phaseOffset = 0;
+
+		$scope.params.coneRotation = 45;
+
+
+
+		if (localStorage.getItem("params") === null) {
 		} else {
-			$scope.params = JSON.parse(localStorage.getItem('params'));
+			$scope.params = Object.assign($scope.params, JSON.parse(localStorage.getItem('params')));
 		}
 
 

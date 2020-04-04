@@ -1,5 +1,7 @@
 app.controller('modelController', function($scope) {
 
+
+
 	$scope.gridSize = [1,1,16];
 
 	// dfmr params
@@ -14,7 +16,7 @@ app.controller('modelController', function($scope) {
 	$scope.spinStructure =  [];
 	$scope.fftStructure = [];
 	$scope.jsonStructure="";
-	
+
 
 	$scope.$watch('params', function (newVal) {
 		$scope.processStructure();
@@ -50,33 +52,56 @@ app.controller('modelController', function($scope) {
 			
 			
 			// dynamic amplitude 
+			var ampA = $scope.params.hallAmpA;
+			var ampB = $scope.params.hallAmpB;
+
 			// amplitude depends on hallAB with periodic modulation along the the length of the spin chain.
-			var ampA = 5+ $scope.params.hallA * Math.abs(Math.cos(2*Math.PI*$scope.params.hallPeriodsA/2 * z/$scope.gridSize[2])); 
-			var ampB = 5+ $scope.params.hallB * Math.abs(Math.cos(2*Math.PI*$scope.params.hallPeriodsB/2 * z/$scope.gridSize[2]));
-// artificial offset
+			ampA = ampA + $scope.params.hallAmpPeriodicA * Math.abs(Math.cos((2*Math.PI*$scope.params.hallPeriodsA/2 * z/$scope.gridSize[2]) + ($scope.params.phaseOffsetA * Math.PI/180))); 
+			ampB = ampB + $scope.params.hallAmpPeriodicB * Math.abs(Math.cos((2*Math.PI*$scope.params.hallPeriodsB/2 * z/$scope.gridSize[2]) + ($scope.params.phaseOffsetB * Math.PI/180)));
 
 			// dynamic phase
-			var phaseAngle = (timeStep/180*Math.PI) + (2*Math.PI*$scope.params.phasePeriods * z/$scope.gridSize[2]); 	// time dependent + position dependent phase
-			aa = ampA * Math.sin(phaseAngle)
-			bb = ampB * Math.cos(phaseAngle)
+			var phaseAngle = (timeStep * Math.PI/180); // time dependent
+			//phaseAngle = phaseAngle + ($scope.params.phaseOffset * Math.PI/180);
+			phaseAngle = phaseAngle + (2*Math.PI*  $scope.params.phasePeriods * z/$scope.gridSize[2]); 	// + position dependent phase
+
+			aa = ampA * Math.sin(phaseAngle );
+			bb = ampB * Math.cos(phaseAngle );
 
 			// give a rotation in x an y axes for the vectors initially pointing along z
 			v0.applyAxisAngle( new THREE.Vector3( 1, 0, 0 ), Math.PI/180*aa );			//  x component
 			v0.applyAxisAngle( new THREE.Vector3( 0, 1, 0 ), Math.PI/180*bb );			//  y component
 
-			//rotate by phase dependent z rotation
-			v0.applyAxisAngle( new THREE.Vector3( 0, 0, 1 ), 0 );			//  z rotation component
+			//rotate dynamic ellipse about z axis
+			v0.applyAxisAngle( new THREE.Vector3( 0, 0, 1 ), Math.PI/180*$scope.params.coneRotation );	//  z rotation component
+
+
 
 
 
 			v0.applyAxisAngle( new THREE.Vector3( 1, 0, 0 ), (90-$scope.params.zeeman)*Math.PI/180 )			// rotate by 90 degrees - zeeman about x axis
 
 
+
+
 		
-			// conical structure
-			var conicalStep = 2*Math.PI*$scope.params.conicalPeriods * z /$scope.gridSize[2];
-			v0.applyAxisAngle( new THREE.Vector3( 0, 0, 1), conicalStep )											// rotate about z axis by conical precession
+			// CHL
+			// z dependent rotation with the number of space periods
+			var conicalAngle = 2*Math.PI * $scope.params.conicalPeriods * z/$scope.gridSize[2];
+			v0.applyAxisAngle( new THREE.Vector3( 0, 0, 1), conicalAngle )	
+
+			//CSL
+			//var conicalAngle =  2* Math.atan( (z/$scope.gridSize[2] - 0.5 )*20);
+			//v0.applyAxisAngle( new THREE.Vector3( 0, 0, 1), conicalAngle )
+
+
+			//var conicalAngle = Math.PI/180 * $scope.params.conicalPeriods2Amp * Math.sin(2*Math.PI * $scope.params.conicalPeriods * 2 * z/$scope.gridSize[2]);
+			//v0.applyAxisAngle( new THREE.Vector3( 0, 0, 1), conicalAngle )		
+
+			var conicalAngle = $scope.params.conicalPeriods2/100  *  2*Math.PI * Math.cos(2*Math.PI*$scope.params.conicalPeriods * z /$scope.gridSize[2]);
+			v0.applyAxisAngle( new THREE.Vector3( 0, 0, 1), conicalAngle )							// rotate about z axis by conical precession
 			
+
+
 			v0.applyAxisAngle( new THREE.Vector3( 0, 1, 0 ), ($scope.params.tiltY * Math.PI / 180));				// rotate about y by tilt angle
 			v0.applyAxisAngle( new THREE.Vector3( 0, 0, 1 ), ($scope.params.tiltZ * Math.PI / 180));				// rotate about z by tilt angle
 

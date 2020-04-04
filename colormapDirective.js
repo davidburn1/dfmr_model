@@ -13,10 +13,6 @@ app.directive('colormap', ['$window', function ($window) {
 
 
 		function refreshDFMR() {
-			//console.log("refresh DFMR")
-			//scope.ki = new THREE.Vector3(Math.cos(scope.options.th* Math.PI / 180) , 0, Math.sin(scope.options.th* Math.PI / 180));
-			//scope.ks = new THREE.Vector3(Math.cos(scope.options.th* Math.PI / 180) , 0,-Math.sin(scope.options.th* Math.PI / 180));
-			
 			scope.ki = new THREE.Vector3(Math.sin(scope.options.th* Math.PI / 180) , 0, Math.cos(scope.options.th* Math.PI / 180));
 			scope.ks = new THREE.Vector3(-Math.sin(scope.options.th* Math.PI / 180) , 0,Math.cos(scope.options.th* Math.PI / 180));
 
