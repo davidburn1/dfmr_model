@@ -131,13 +131,13 @@
 
 	<div class="row">
 		<div class="col-sm-4">
-			<div colormap delay="delay" model="fftStructure" options="dfmrOptions" idx=6> </div>
+			<div colormap model="fftStructure" idx=6> </div>
 		</div>
 		<div class="col-sm-4">
-			<div colormap delay="delay" model="fftStructure" options="dfmrOptions" idx=8> </div>
+			<div colormap model="fftStructure" idx=8> </div>
 		</div>
 		<div class="col-sm-4">
-			<div colormap delay="delay" model="fftStructure" options="dfmrOptions" idx=10> </div>
+			<div colormap model="fftStructure" idx=10> </div>
 		</div>
 	</div>
 			
@@ -178,7 +178,7 @@
 
 <script>
 	
-	app.controller('mainController', function($scope) {
+	app.controller('mainController', function($scope, dfmr) {
 
 		$scope.params = {};
 		$scope.params.tiltY = 0;
@@ -212,7 +212,6 @@
 
 		$scope.$watch('params', function (newVal) {
 			localStorage.setItem('params', JSON.stringify($scope.params));
-			
 		}, true);
 
 

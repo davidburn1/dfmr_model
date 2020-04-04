@@ -1,0 +1,110 @@
+<meta charset="utf-8">
+		
+		
+<div ng-app="myApp" ng-controller="mainController" >
+<div ng-controller="modelController" >
+
+<div class="container-fluid">
+	
+	<div class="row">
+		<div class="col-sm-4">
+
+			<div class="row">
+				<div class="col-sm-12 text-right">
+					<textarea id="structureTextarea" ng-model="jsonStructure"  class="form-control" style="min-width: 100%"></textarea>
+					<button ng-click="copyStructure()">copy</button>
+					<button ng-click="loadStructure()">load</button>
+				</div>
+			</div>
+			
+		</div>
+	
+
+		<div class="col-sm-8">
+			<div class="row">
+				<div class="col-sm-12">	
+					<div animation model="spinStructure" speed=20 style="height: 600px; width:100%;"> </div>
+				</div>
+			</div>
+		</div>		
+
+	</div>
+
+
+
+	<div class="row">
+		<div class="col-sm-4">
+			<div colormap delay="delay" model="fftStructure" options="dfmrOptions" idx=6> </div>
+		</div>
+		<div class="col-sm-4">
+			<div colormap delay="delay" model="fftStructure" options="dfmrOptions" idx=8> </div>
+		</div>
+		<div class="col-sm-4">
+			<div colormap delay="delay" model="fftStructure" options="dfmrOptions" idx=10> </div>
+		</div>
+	</div>
+			
+
+	
+</div>
+</div>
+</div>
+
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+<link rel="stylesheet" href="styles.css">
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+<script src="https://d3js.org/d3.v5.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/110/three.min.js"></script>
+
+<script src="./TrackballControls.js"></script>
+<script src="./OrbitControls.js"></script>
+<script src="./Detector.js"></script>
+<script src="./fft.js"></script>
+
+<script>
+	var app = angular.module('myApp', []);
+</script>
+
+
+<script src="./colormapDirective.js"></script>
+<script src="./animationDirective.js"></script>
+<script src="./js.js"></script>
+
+
+
+<script>
+	
+	app.controller('mainController', function($scope, dfmr) {
+		$scope.spinStructure = [];
+
+
+		$scope.loadStructure = function() {
+			// convert array back into the three vector array
+			var textBox = document.getElementById("structureTextarea");
+
+			$scope.spinStructure = JSON.parse(textBox.innerHTML);
+			for (i = 0; i < $scope.spinStructure.length; i++) { 
+				for (j=0; j < $scope.spinStructure[i].length; j++) { 
+					$scope.spinStructure[i][j] = new THREE.Vector3( $scope.spinStructure[i][j][0], $scope.spinStructure[i][j][1], $scope.spinStructure[i][j][2] )
+				}
+			}
+
+			for (i = 0; i < $scope.spinStructure.length; i++) { 
+				$scope.fftStructure[i] = fftStructure($scope.spinStructure[i]);
+			}
+		};
+
+		$scope.copyStructure = function(){
+			var textBox = document.getElementById("structureTextarea");
+			textBox.select();
+			document.execCommand("copy");
+		}
+
+	});
+</script>
+

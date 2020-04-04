@@ -10,9 +10,9 @@
 				Conical periods: <input class="form-control" ng-model="params.conicalPeriods" type="number"></input><br>
 				<div animation model="spinStructure" speed=20 style="height: 600px; width:100%;"> </div><br>
 				
-				<div colormap delay="delay" model="fftStructure" options="dfmrOptions" idx=6> </div><br>
-				<div colormap delay="delay" model="fftStructure" options="dfmrOptions" idx=8> </div><br>
-				<div colormap delay="delay" model="fftStructure" options="dfmrOptions" idx=10> </div>
+				<div colormap model="fftStructure" idx=6> </div><br>
+				<div colormap model="fftStructure" idx=8> </div><br>
+				<div colormap model="fftStructure" idx=10> </div>
 			</div>
 	</div>
 </div>
@@ -60,12 +60,18 @@ app.controller('mainController', function($scope) {
 		params.tiltZ = 0;
 		params.zeeman = 40;
 		params.conicalPeriods = 2; // in z direction
+		params.conicalPeriods2 = 0; // in z direction
 		params.phasePeriods = phasePeriods[i];
-		params.hallA = 10;
-		params.hallB = 10;
-
+		params.hallAmpA = 10;
+		params.hallAmpB = 10;
+		params.hallAmpPeriodicA = 0;
+		params.hallAmpPeriodicB = 0;
 		params.hallPeriodsA = 0;
 		params.hallPeriodsB = 0;
+
+		params.phaseOffsetA = 0;
+		params.phaseOffsetB = 0;
+		params.coneRotation = 0;
 
 		$scope.paramsList.push(params);
 

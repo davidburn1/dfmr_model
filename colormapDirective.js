@@ -3,6 +3,15 @@ app.directive('colormap', ['$window', function ($window) {
 
 		scope.laa = [0,15,30,45,60,75,90,105,120,135,150,165];
 
+		//$scope.delay = [0, 10,20,30,40,50,60,70,80,90,100,110,120,130,140,150,160,170,180,190,200,210,220,230,240,250,260];
+		scope.delay = [];
+		for (i = 0; i < 360; i=i+10) { scope.delay.push(i); } 
+
+			// dfmr params
+		scope.options = {};
+		scope.options['th'] = 45;
+
+
         scope.$watch('model', function (newVal) {
 			refreshDFMR();
 		}, true);
@@ -118,7 +127,7 @@ app.directive('colormap', ['$window', function ($window) {
 
 
     return {
-		scope: {'model':'=', 'delay':'=', 'options':'=', 'idx':'='},
+		scope: {'model':'=',  'idx':'='},
         link: linkFunc
     };
 }]);
