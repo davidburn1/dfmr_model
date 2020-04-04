@@ -108,7 +108,6 @@
 				<div class="col-sm-12 text-right">
 					<textarea id="structureTextarea" ng-model="jsonStructure"  class="form-control" style="min-width: 100%"></textarea>
 					<button ng-click="copyStructure()">copy</button>
-					<button ng-click="loadStructure()">load</button>
 				</div>
 			</div>
 
@@ -212,30 +211,8 @@
 
 		$scope.$watch('params', function (newVal) {
 			localStorage.setItem('params', JSON.stringify($scope.params));
+
 		}, true);
-
-
-
-
-
-
-		$scope.loadStructure = function() {
-			// convert array back into the three vector array
-
-			var textBox = document.getElementById("structureTextarea");
-
-			$scope.spinStructure = JSON.parse(textBox.innerHTML);
-			for (i = 0; i < $scope.spinStructure.length; i++) { 
-				for (j=0; j < $scope.spinStructure[i].length; j++) { 
-					$scope.spinStructure[i][j] = new THREE.Vector3( $scope.spinStructure[i][j][0], $scope.spinStructure[i][j][1], $scope.spinStructure[i][j][2] )
-				}
-			}
-
-			for (i = 0; i < $scope.spinStructure.length; i++) { 
-				$scope.fftStructure[i] = fftStructure($scope.spinStructure[i]);
-			}
-			//drawCircles();
-		};
 
 		$scope.copyStructure = function(){
 			var textBox = document.getElementById("structureTextarea");

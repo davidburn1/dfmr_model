@@ -4,10 +4,6 @@
 
 app.service('dfmr', function() {
 
-	
-	//this.gridSize = [1,1,16];
-
-
 
 	this.calculateFftStructure = function(spinStructure){
 		fftStructure = Array()
@@ -33,19 +29,33 @@ app.service('dfmr', function() {
 	}
 		
 
-	this.structureToJson = function(){
+	this.structureToJson = function(spinStructure){
 		//convert three vectors into normal arrays
 		var out = [];
-		for (i=0; i < $scope.spinStructure.length; i++) { // loop through delay
-			out[i] = [];
-			for (j=0; j < $scope.spinStructure[i].length; j++) { // loop through space
-				out[i][j] = [$scope.spinStructure[i][j]['x'], $scope.spinStructure[i][j]['y'], $scope.spinStructure[i][j]['z']]
+		for (t=0; t<spinStructure.length; t++) { // loop through delay
+			out[t] = [];
+			for (z=0; z<spinStructure[t].length; z++) { // loop through space
+				out[t][z] = [spinStructure[t][z]['x'], spinStructure[t][z]['y'], spinStructure[t][z]['z']]
 			}
 		}
 		return JSON.stringify(out);
 	}
 
+	
+	this.jsonToStructure = function(json) {
+		// convert array back into the three vector array
+		//var textBox = document.getElementById("structureTextarea");
+		json = JSON.parse(json);
 
+		var spinStructure = Array();
+		for (t=0; t<json.length; t++) { 
+			spinStructure[t] = Array();
+			for (z=0; z<json[t].length; z++) { 
+				spinStructure[t][z] = new THREE.Vector3( json[t][z][0], json[t][z][1], json[t][z][2] )
+			}
+		}
+		return spinStructure;
+	};
 
   });
 
@@ -63,7 +73,6 @@ app.controller('modelController', function($scope, dfmr) {
 
 	$scope.gridSize = [36, 1,1,16];
 
-
 	$scope.spinStructure =  [];
 	$scope.fftStructure = [];
 	$scope.jsonStructure = "";
@@ -72,7 +81,7 @@ app.controller('modelController', function($scope, dfmr) {
 	$scope.$watch('params', function (newVal) {
 		$scope.spinStructure = $scope.calculateStructure();
 		$scope.fftStructure = dfmr.calculateFftStructure($scope.spinStructure);
-		//$scope.jsonStructure = $scope.structureToJson();
+		$scope.jsonStructure = dfmr.structureToJson($scope.spinStructure);
     }, true);
 
 

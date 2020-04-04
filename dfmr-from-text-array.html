@@ -2,7 +2,6 @@
 		
 		
 <div ng-app="myApp" ng-controller="mainController" >
-<div ng-controller="modelController" >
 
 <div class="container-fluid">
 	
@@ -12,8 +11,6 @@
 			<div class="row">
 				<div class="col-sm-12 text-right">
 					<textarea id="structureTextarea" ng-model="jsonStructure"  class="form-control" style="min-width: 100%"></textarea>
-					<button ng-click="copyStructure()">copy</button>
-					<button ng-click="loadStructure()">load</button>
 				</div>
 			</div>
 			
@@ -46,7 +43,7 @@
 			
 
 	
-</div>
+
 </div>
 </div>
 
@@ -80,30 +77,41 @@
 <script>
 	
 	app.controller('mainController', function($scope, dfmr) {
-		$scope.spinStructure = [];
+		$scope.gridSize = [36, 1,1,16];
+		$scope.spinStructure = Array();
+		$scope.fftStructure = Array();
+		$scope.jsonStructure = "";
 
 
-		$scope.loadStructure = function() {
-			// convert array back into the three vector array
-			var textBox = document.getElementById("structureTextarea");
+		$scope.$watch('jsonStructure', function (newVal) {
+			if ($scope.jsonStructure == "") {return;}
+			$scope.spinStructure = dfmr.jsonToStructure($scope.jsonStructure);
+			$scope.fftStructure = dfmr.calculateFftStructure($scope.spinStructure);
+		}, true);
 
-			$scope.spinStructure = JSON.parse(textBox.innerHTML);
-			for (i = 0; i < $scope.spinStructure.length; i++) { 
-				for (j=0; j < $scope.spinStructure[i].length; j++) { 
-					$scope.spinStructure[i][j] = new THREE.Vector3( $scope.spinStructure[i][j][0], $scope.spinStructure[i][j][1], $scope.spinStructure[i][j][2] )
-				}
-			}
 
-			for (i = 0; i < $scope.spinStructure.length; i++) { 
-				$scope.fftStructure[i] = fftStructure($scope.spinStructure[i]);
-			}
-		};
 
-		$scope.copyStructure = function(){
-			var textBox = document.getElementById("structureTextarea");
-			textBox.select();
-			document.execCommand("copy");
+	
+	$scope.calculateStructure = function(){
+		output = Array();
+		for (t = 0; t < $scope.gridSize[0]; t++) { 
+		vectors = Array();
+		for (z = 0; z < $scope.gridSize[3]; z++) { 
+		for (y = 0; y < $scope.gridSize[2]; y++) { 
+		for (x = 0; x < $scope.gridSize[1]; x++) { 
+			var v0 = new THREE.Vector3( 0, 0, 1 );
+			vectors = vectors.concat(v0);
+		}}}
+		output[t] = vectors;
 		}
+		return output
+	}
+
+
+
+	$scope.spinStructure = $scope.calculateStructure();
+	$scope.fftStructure = dfmr.calculateFftStructure($scope.spinStructure);
+
 
 	});
 </script>
