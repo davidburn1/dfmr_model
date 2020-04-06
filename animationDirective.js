@@ -139,6 +139,14 @@ function drawAxes(){
 	axes.add(arrow);
 
 
+
+	var geometry = new THREE.PlaneGeometry( 4, 16, 1 ).rotateX( 90 * Math.PI/180);
+	var material = new THREE.MeshBasicMaterial( {color:0x8888ff, side:THREE.DoubleSide, opacity:0.5, transparent:true} );
+	var plane = new THREE.Mesh( geometry, material );
+	
+	axes.add( plane );
+
+
 	return axes;
 }
 

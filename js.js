@@ -125,18 +125,23 @@ app.controller('modelController', function($scope, dfmr) {
 			v0.applyAxisAngle( new THREE.Vector3( 0, 0, 1 ), Math.PI/180*$scope.params.coneRotation );	//  z rotation component
 
 
-			v0.applyAxisAngle( new THREE.Vector3( 1, 0, 0 ), (90-$scope.params.zeeman)*Math.PI/180 )			// rotate by 90 degrees - zeeman about x axis
+			//v0.applyAxisAngle( new THREE.Vector3( 1, 0, 0 ), $scope.params.zeeman * Math.PI/180 )			// rotate by 90 degrees - zeeman about x axis
 
 
 
 			// CHL
 			// z dependent rotation with the number of space periods
 			var conicalAngle = 2*Math.PI * $scope.params.conicalPeriods * z/$scope.gridSize[3];
-			v0.applyAxisAngle( new THREE.Vector3( 0, 0, 1), conicalAngle )	
+			conicalAngle = conicalAngle + (Math.PI/180 * $scope.params.conicalPhase);
+			v0.applyAxisAngle( new THREE.Vector3( 0, 1, 0), conicalAngle )	
 
 			//CSL
 			//var conicalAngle =  2* Math.atan( (z/$scope.gridSize[3] - 0.5 )*20);
 			//v0.applyAxisAngle( new THREE.Vector3( 0, 0, 1), conicalAngle )
+
+			v0.applyAxisAngle( new THREE.Vector3( 1, 0, 0 ), ($scope.params.tiltY * Math.PI / 180));				// rotate about y by tilt angle
+			v0.applyAxisAngle( new THREE.Vector3( 0, 0, 1 ), ($scope.params.tiltZ * Math.PI / 180));				// rotate about z by tilt angle
+
 
 
 			//var conicalAngle = Math.PI/180 * $scope.params.conicalPeriods2Amp * Math.sin(2*Math.PI * $scope.params.conicalPeriods * 2 * z/$scope.gridSize[3]);
@@ -147,8 +152,8 @@ app.controller('modelController', function($scope, dfmr) {
 			
 
 
-			v0.applyAxisAngle( new THREE.Vector3( 0, 1, 0 ), ($scope.params.tiltY * Math.PI / 180));				// rotate about y by tilt angle
-			v0.applyAxisAngle( new THREE.Vector3( 0, 0, 1 ), ($scope.params.tiltZ * Math.PI / 180));				// rotate about z by tilt angle
+			//v0.applyAxisAngle( new THREE.Vector3( 1, 0, 0 ), $scope.params.zeeman * Math.PI/180 )			// rotate by 90 degrees - zeeman about x axis
+			v0 = v0.add( new THREE.Vector3( 0, 0, $scope.params.zeeman)).normalize ();
 
 
 			// introduce squashing to represent surface effects

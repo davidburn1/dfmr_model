@@ -37,22 +37,33 @@ app.directive('colormap', ['$window', function ($window) {
 
 
 			// differentiate grid along delay 
-			var laaDelayGridDiff = [];
-			for (var j=0; j < scope.delay.length; j++) {
-				laaDelayGridDiff[j] = [];
+			// var laaDelayGridDiff = [];
+			// for (var j=0; j < scope.delay.length; j++) {
+			// 	laaDelayGridDiff[j] = [];
+			// 	for (var i=0; i < P.length; i++) {
+			// 		if (j==0) {
+			// 			laaDelayGridDiff[j][i] = laaDelayGrid[j][i]  - laaDelayGrid[scope.delay.length-1][i];
+			// 		} else {
+			// 			laaDelayGridDiff[j][i] = laaDelayGrid[j][i]  - laaDelayGrid[j-1][i];
+			// 		}
+			// 	}
+			// }
+			// laaDelayGrid = laaDelayGridDiff;	
+
+
+
+
+
+			var laaDelayGridPhaseMod = [];
+			for (var t=0; t<scope.delay.length; t++) {
+				t180 = (t + scope.delay.length/2) % scope.delay.length;
+				//console.log(t, t180);
+				laaDelayGridPhaseMod[t] = [];
 				for (var i=0; i < P.length; i++) {
-					if (j==0) {
-						laaDelayGridDiff[j][i] = laaDelayGrid[j][i]  - laaDelayGrid[scope.delay.length-1][i];
-					} else {
-						laaDelayGridDiff[j][i] = laaDelayGrid[j][i]  - laaDelayGrid[j-1][i];
-					}
+					laaDelayGridPhaseMod[t][i] = laaDelayGrid[t][i]  - laaDelayGrid[t180][i];
 				}
 			}
-
-			laaDelayGrid = laaDelayGridDiff;	
-
-
-
+			laaDelayGrid = laaDelayGridPhaseMod;
 
 
 

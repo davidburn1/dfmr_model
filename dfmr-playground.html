@@ -5,109 +5,131 @@
 <div ng-controller="modelController" >
 
 <div class="container-fluid">
+
+
 	
 	<div class="row">
-		<div class="col-sm-4">
-
-			<!--
-			<div class="row">
-				<div class="col-sm-3 text-right"><b>Tilt Y angle:</b></div> 
-				<div class="col-sm-9"> <rzslider rz-slider-model="params.tiltY" rz-slider-options="{ceil:90}"></rzslider> </div>
-			</div>	
-			<div class="row">
-				<div class="col-sm-3 text-right"><b>Tilt Z angle:</b></div> 
-				<div class="col-sm-9"> <rzslider rz-slider-model="params.tiltZ" rz-slider-options="{ceil:90}"></rzslider> </div>
-			</div>	
-			-->
-			<div class="row">
-				<div class="col-sm-3 text-right"><b>Tilt Y:</b></div> 
-				 <input class="col-sm-3 form-control" type="number" ng-model="params.tiltY" ></input> 
-				 <div class="col-sm-3 text-right"><b>Tilt Z:</b></div> 
-				 <input class="col-sm-3 form-control" type="number" ng-model="params.tiltZ" ></input> 
-			</div>	
-			<div class="row">
-				<div class="col-sm-3 text-right"><b>Zeeman angle:</b></div> 
-				<div class="col-sm-9"> <rzslider rz-slider-model="params.zeeman" rz-slider-options="{ceil:90, floor:-90, step:10}"></rzslider> </div>
-			</div>	
-			<div class="row">
-				<div class="col-sm-3 text-right"><b> Conical periods:</b></div> 
-				<div class="col-sm-9"> <rzslider rz-slider-model="params.conicalPeriods" rz-slider-options="{ceil:8, floor:-8}"></rzslider> </div>
-			</div>
-
-			<div class="row">
-				<div class="col-sm-3 text-right"><b> Conical periods2:</b></div> 
-				<rzslider class="col-sm-9" rz-slider-model="params.conicalPeriods2" rz-slider-options="{ceil:180, step:10}"></rzslider> 
-			</div>
+		<div class="col-sm-5">
 
 
 
-			<div class="row">
-				<div class="col-sm-3 text-right"><b> Phase periods:</b></div> 
-				<div class="col-sm-9"> <rzslider rz-slider-model="params.phasePeriods" rz-slider-options="{ceil:8, floor:-8}"></rzslider> </div>
-			</div>
+			<nav id="navbar-example2" class="navbar navbar-light bg-light">
+				
+				<ul class="nav nav-pills">
+				  <li class="nav-item">
+					<a class="nav-link" href="#static"> Static </a>
+				  </li>
+				  <li class="nav-item">
+					<a class="nav-link" href="#dynamic"> Dynamic </a>
+				  </li>
+				</ul>
+			  </nav>
+			  <div class="container-fluid" data-spy="scroll" data-target="#navbar-example2" data-offset="0" style="height:800px;  overflow-y:scroll; ">
 
 
-			<hr class="row"></hr>
-			<h2> Dynamic cone shape </h2>
 
-			<div class="row">
-				<div class="col-sm-3 text-right"><b> Angle a:</b></div> 
-				<rzslider class="col-sm-9" rz-slider-model="params.hallAmpA" rz-slider-options="{ceil:90, step:10}"></rzslider>
-			</div>
-			<div class="row">
-				<div class="col-sm-3 text-right"><b> Angle b:</b></div> 
-				<rzslider class="col-sm-9" rz-slider-model="params.hallAmpB" rz-slider-options="{ceil:90, step:10}"></rzslider>
-			</div>
 
-			<div class="row">
-				<div class="col-sm-3 text-right"><b> Periodic Angle a:</b></div> 
-				<rzslider class="col-sm-9" rz-slider-model="params.hallAmpPeriodicA" rz-slider-options="{ceil:90, step:10}"></rzslider>
-			</div>
-			<div class="row">
-				<div class="col-sm-3 text-right"><b> Periodic Angle b:</b></div> 
-				<rzslider class="col-sm-9" rz-slider-model="params.hallAmpPeriodicB" rz-slider-options="{ceil:90, step:10}"></rzslider>
-			</div>
 
-			<div class="row">
-				<div class="col-sm-3 text-right"><b> Periods a:</b></div> 
-				<div class="col-sm-9"> <rzslider rz-slider-model="params.hallPeriodsA" rz-slider-options="{ceil:8, floor:-8}"></rzslider> </div>
-			</div>
-			<div class="row">
-				<div class="col-sm-3 text-right"><b> Periods b:</b></div> 
-				<div class="col-sm-9"> <rzslider rz-slider-model="params.hallPeriodsB" rz-slider-options="{ceil:8, floor:-8}"></rzslider> </div>
-			</div>
 
-			<div class="row">
-				<div class="col-sm-3 text-right"><b> cone rotation:</b></div> 
-				<div class="col-sm-9"> <rzslider rz-slider-model="params.coneRotation" rz-slider-options="{ceil:180, floor:-180, step:10}"></rzslider> </div>
-			</div>
+				<h4 id="static"> Static </h4>
 
-			<div class="row">
-				<p class="col-sm-3 text-right"><b> phase offset a:</b></p> 
-				<rzslider class="col-sm-9" rz-slider-model="params.phaseOffsetA" rz-slider-options="{ceil:180, floor:-180, step:10}"></rzslider>
-			</div>
-			<div class="row">
-				<p class="col-sm-3 text-right"><b> phase offset b:</b></p> 
-				<rzslider class="col-sm-9" rz-slider-model="params.phaseOffsetB" rz-slider-options="{ceil:180, floor:-180, step:10}"></rzslider>
-			</div>
+				<div class="row">
+					<div class="col-sm-3 text-right"><b>Tilt Y angle:</b></div> 
+					<rzslider class="col-sm-9" rz-slider-model="params.tiltY" rz-slider-options="{ceil:90, step:10}"></rzslider>
+				</div>	
+				<div class="row">
+					<div class="col-sm-3 text-right"><b>Tilt Z angle:</b></div> 
+					<rzslider class="col-sm-9" rz-slider-model="params.tiltZ" rz-slider-options="{ceil:90, step:10}"></rzslider>
+				</div>	
+				
+				<!-- <div class="row">
+					<div class="col-sm-3 text-right"><b>Tilt Y:</b></div> 
+					 <input class="col-sm-3 form-control" type="number" ng-model="params.tiltY" ></input> 
+					 <div class="col-sm-3 text-right"><b>Tilt Z:</b></div> 
+					 <input class="col-sm-3 form-control" type="number" ng-model="params.tiltZ" ></input> 
+				</div>	 -->
+				<div class="row">
+					<div class="col-sm-3 text-right"><b>Zeeman :</b></div> 
+					<rzslider class="col-sm-9" rz-slider-model="params.zeeman" rz-slider-options="{ceil:10, floor:-10, step:1}"></rzslider>
+				</div>	
+				<div class="row">
+					<div class="col-sm-3 text-right"><b> Conical periods:</b></div> 
+					<rzslider class="col-sm-9" rz-slider-model="params.conicalPeriods" rz-slider-options="{ceil:8, floor:-8}"></rzslider>
+				</div>
+				<div class="row">
+					<div class="col-sm-3 text-right"><b> Conical phase:</b></div> 
+					<rzslider class="col-sm-9" rz-slider-model="params.conicalPhase" rz-slider-options="{ceil:360, step:10}"></rzslider>
+				</div>
 	
-						
+				<div class="row">
+					<div class="col-sm-3 text-right"><b> Conical periods2:</b></div> 
+					<rzslider class="col-sm-9" rz-slider-model="params.conicalPeriods2" rz-slider-options="{ceil:30, floor:-30, step:1}"></rzslider> 
+				</div>
 
-			<!--
-			<div class="row">
-				<div class="col-sm-3 text-right"><b> Speed:</b></div> 
-				<div class="col-sm-9"> <rzslider rz-slider-model="speed" rz-slider-options="{ceil:100}"></rzslider> </div>
-			</div>
-			<div class="row" ng-hide="speed!=0">
-				<div class="col-sm-3 text-right"><b> time step:</b></div> 
-				<div class="col-sm-9"> <rzslider rz-slider-model="timeStep" rz-slider-options="{ceil:35}"></rzslider> </div>
-			</div>
-			-->
+
+
+
+
+		
+				<h4 id="dynamic"> Dynamic </h4>
+
+				<div class="row">
+					<div class="col-sm-3 text-right"><b> Phase periods:</b></div> 
+					<rzslider class="col-sm-9" rz-slider-model="params.phasePeriods" rz-slider-options="{ceil:8, floor:-8}"></rzslider>
+				</div>
+
+				<div class="row">
+					<div class="col-sm-3 text-right"><b> Angle a:</b></div> 
+					<rzslider class="col-sm-9" rz-slider-model="params.hallAmpA" rz-slider-options="{ceil:90, step:10}"></rzslider>
+				</div>
+				<div class="row">
+					<div class="col-sm-3 text-right"><b> Angle b:</b></div> 
+					<rzslider class="col-sm-9" rz-slider-model="params.hallAmpB" rz-slider-options="{ceil:90, step:10}"></rzslider>
+				</div>
+	
+				<div class="row">
+					<div class="col-sm-3 text-right"><b> Periodic Angle a:</b></div> 
+					<rzslider class="col-sm-9" rz-slider-model="params.hallAmpPeriodicA" rz-slider-options="{ceil:90, step:1}"></rzslider>
+				</div>
+				<div class="row">
+					<div class="col-sm-3 text-right"><b> Periodic Angle b:</b></div> 
+					<rzslider class="col-sm-9" rz-slider-model="params.hallAmpPeriodicB" rz-slider-options="{ceil:90, step:1}"></rzslider>
+				</div>
+	
+				<div class="row">
+					<div class="col-sm-3 text-right"><b> Periods a:</b></div> 
+					<rzslider class="col-sm-9" rz-slider-model="params.hallPeriodsA" rz-slider-options="{ceil:8, floor:-8}"></rzslider>
+				</div>
+				<div class="row">
+					<div class="col-sm-3 text-right"><b> Periods b:</b></div> 
+					 <rzslider class="col-sm-9" rz-slider-model="params.hallPeriodsB" rz-slider-options="{ceil:8, floor:-8}"></rzslider>
+				</div>
+	
+				<div class="row">
+					<div class="col-sm-3 text-right"><b> cone rotation:</b></div> 
+					<rzslider class="col-sm-9" rz-slider-model="params.coneRotation" rz-slider-options="{ceil:180, floor:-180, step:10}"></rzslider>
+				</div>
+	
+				<div class="row">
+					<p class="col-sm-3 text-right"><b> phase offset a:</b></p> 
+					<rzslider class="col-sm-9" rz-slider-model="params.phaseOffsetA" rz-slider-options="{ceil:180, floor:-180, step:10}"></rzslider>
+				</div>
+				<div class="row">
+					<p class="col-sm-3 text-right"><b> phase offset b:</b></p> 
+					<rzslider class="col-sm-9" rz-slider-model="params.phaseOffsetB" rz-slider-options="{ceil:180, floor:-180, step:10}"></rzslider>
+				</div>
+		
+
+
+
+			  </div>
+
+
 
 			<div class="row">
 				<div class="col-sm-12 text-right">
 					<textarea id="structureTextarea" ng-model="jsonStructure"  class="form-control" style="min-width: 100%"></textarea>
-					<button ng-click="copyStructure()">copy</button>
+					<button class="btn btn-primary" ng-click="copyStructure()">copy</button>
 				</div>
 			</div>
 
@@ -116,29 +138,22 @@
 		</div>
 	
 
-		<div class="col-sm-8">
+		<div class="col-sm-7">
 			<div class="row">
-				<div class="col-sm-12">	
-					<div animation model="spinStructure" speed=20 style="height: 600px; width:100%;"> </div>
-				</div>
+					<div class="col-sm-12" animation model="spinStructure" speed=20 style="height: 600px; width:100%;"> 
 			</div>
+			<div class="row">
+				<div class="col-sm-4" colormap model="fftStructure" idx=6> </div>
+				<div class="col-sm-4" colormap model="fftStructure" idx=8> </div>
+				<div class="col-sm-4" colormap model="fftStructure" idx=10> </div>
+		</div>
+
 		</div>		
 
 	</div>
 
 
 
-	<div class="row">
-		<div class="col-sm-4">
-			<div colormap model="fftStructure" idx=6> </div>
-		</div>
-		<div class="col-sm-4">
-			<div colormap model="fftStructure" idx=8> </div>
-		</div>
-		<div class="col-sm-4">
-			<div colormap model="fftStructure" idx=10> </div>
-		</div>
-	</div>
 			
 
 	
@@ -185,6 +200,7 @@
 		$scope.params.zeeman = 0;
 
 		$scope.params.conicalPeriods = 2; // in z direction
+		$scope.params.conicalPhase = 0;
 		$scope.params.conicalPeriods2 = 2; // in z direction
 		$scope.params.phasePeriods = 0;
 
