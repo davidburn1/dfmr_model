@@ -1,14 +1,15 @@
 
     
 .container-fluid {
-    height: 100vh;  
+    zzheight: 100vh;  
 }
 
 
 
 .rzslider {
     height: 4px;
-    margin: 35px 0 10px 0;
+    margin: 35px 0px 10px 0px;
+
   }
 
 .rzslider .rz-bar-wrapper {

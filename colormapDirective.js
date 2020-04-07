@@ -153,7 +153,7 @@ app.directive('colormap', ['$window', function ($window) {
 
 
 function ColormapPlot(id, data){
-	var	margin = {top: 10, right: 15, bottom: 40, left: 50};
+	var	margin = {top: 10, right: 10, bottom: 40, left: 50};
 	var width = 300 - margin.left - margin.right;
 	var height = 280 - margin.top - margin.bottom;
 	

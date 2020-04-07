@@ -24,7 +24,7 @@
 				  </li>
 				</ul>
 			  </nav>
-			  <div class="container-fluid" data-spy="scroll" data-target="#navbar-example2" data-offset="0" style="height:800px;  overflow-y:scroll; ">
+			  <div class="container-fluid" data-spy="scroll" data-target="#navbar-example2" data-offset="0" style="height:780px;  overflow-y:scroll; overflow-x:hidden; ">
 
 
 
@@ -35,11 +35,11 @@
 
 				<div class="row">
 					<div class="col-sm-3 text-right"><b>Tilt Y angle:</b></div> 
-					<rzslider class="col-sm-9" rz-slider-model="params.tiltY" rz-slider-options="{ceil:90, step:10}"></rzslider>
+					<rzslider class="col-sm-9" rz-slider-model="params.tiltY" rz-slider-options="{ceil:90, step:5}"></rzslider>
 				</div>	
 				<div class="row">
 					<div class="col-sm-3 text-right"><b>Tilt Z angle:</b></div> 
-					<rzslider class="col-sm-9" rz-slider-model="params.tiltZ" rz-slider-options="{ceil:90, step:10}"></rzslider>
+					<rzslider class="col-sm-9" rz-slider-model="params.tiltZ" rz-slider-options="{ceil:360, floor:0, step:5}"></rzslider>
 				</div>	
 				
 				<!-- <div class="row">
@@ -49,9 +49,18 @@
 					 <input class="col-sm-3 form-control" type="number" ng-model="params.tiltZ" ></input> 
 				</div>	 -->
 				<div class="row">
-					<div class="col-sm-3 text-right"><b>Zeeman :</b></div> 
-					<rzslider class="col-sm-9" rz-slider-model="params.zeeman" rz-slider-options="{ceil:10, floor:-10, step:1}"></rzslider>
+					<div class="col-sm-3 text-right"><b>Zeeman X :</b></div> 
+					<rzslider class="col-sm-9" rz-slider-model="params.zeemanX" rz-slider-options="{ceil:10, floor:-10, step:1}"></rzslider>
 				</div>	
+				<div class="row">
+					<div class="col-sm-3 text-right"><b>Zeeman Y :</b></div> 
+					<rzslider class="col-sm-9" rz-slider-model="params.zeemanY" rz-slider-options="{ceil:10, floor:-10, step:1}"></rzslider>
+				</div>	
+				<div class="row">
+					<div class="col-sm-3 text-right"><b>Zeeman Z :</b></div> 
+					<rzslider class="col-sm-9" rz-slider-model="params.zeemanZ" rz-slider-options="{ceil:10, floor:-10, step:1}"></rzslider>
+				</div>	
+
 				<div class="row">
 					<div class="col-sm-3 text-right"><b> Conical periods:</b></div> 
 					<rzslider class="col-sm-9" rz-slider-model="params.conicalPeriods" rz-slider-options="{ceil:8, floor:-8}"></rzslider>
@@ -127,10 +136,14 @@
 
 
 			<div class="row">
-				<div class="col-sm-12 text-right">
-					<textarea id="structureTextarea" ng-model="jsonStructure"  class="form-control" style="min-width: 100%"></textarea>
-					<button class="btn btn-primary" ng-click="copyStructure()">copy</button>
+				<div class="col-sm-6 text-right">
+					<textarea id="structureTextarea" ng-model="jsonStructure"  class="form-control" style="min-width: 50%"></textarea>
 				</div>
+				<div class="col-sm-6 text-right">
+					<textarea id="paramsTextarea"   class="form-control" style="min-width: 50%">{{params | json}}</textarea>
+				</div>
+					<button class="btn btn-primary" ng-click="copyStructure()">copy</button>
+				
 			</div>
 
 	
@@ -190,6 +203,14 @@
 
 
 
+
+<script type="text/javascript" src="modelParams/model1.json"></script>
+
+
+
+
+
+
 <script>
 	
 	app.controller('mainController', function($scope, dfmr) {
@@ -220,6 +241,16 @@
 		} else {
 			$scope.params = Object.assign($scope.params, JSON.parse(localStorage.getItem('params')));
 		}
+
+		// load params from a saved model json file
+		var urlParams = new URLSearchParams(window.location.search);
+		if (urlParams.has('model')){
+			$scope.params = eval(urlParams.get('model'));
+		}
+
+
+
+
 
 
 

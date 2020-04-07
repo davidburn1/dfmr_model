@@ -139,9 +139,7 @@ app.controller('modelController', function($scope, dfmr) {
 			//var conicalAngle =  2* Math.atan( (z/$scope.gridSize[3] - 0.5 )*20);
 			//v0.applyAxisAngle( new THREE.Vector3( 0, 0, 1), conicalAngle )
 
-			v0.applyAxisAngle( new THREE.Vector3( 1, 0, 0 ), ($scope.params.tiltY * Math.PI / 180));				// rotate about y by tilt angle
-			v0.applyAxisAngle( new THREE.Vector3( 0, 0, 1 ), ($scope.params.tiltZ * Math.PI / 180));				// rotate about z by tilt angle
-
+			v0.applyAxisAngle( new THREE.Vector3( 1, 0, 0 ), (90 * Math.PI / 180));			
 
 
 			//var conicalAngle = Math.PI/180 * $scope.params.conicalPeriods2Amp * Math.sin(2*Math.PI * $scope.params.conicalPeriods * 2 * z/$scope.gridSize[3]);
@@ -151,9 +149,14 @@ app.controller('modelController', function($scope, dfmr) {
 			v0.applyAxisAngle( new THREE.Vector3( 0, 0, 1), conicalAngle )							// rotate about z axis by conical precession
 			
 
+			v0.applyAxisAngle( new THREE.Vector3( 1, 0, 0 ), ($scope.params.tiltY * Math.PI / 180));				// rotate about y by tilt angle
+			v0.applyAxisAngle( new THREE.Vector3( 0, 0, 1 ), ($scope.params.tiltZ * Math.PI / 180));				// rotate about z by tilt angle
+
+
+
 
 			//v0.applyAxisAngle( new THREE.Vector3( 1, 0, 0 ), $scope.params.zeeman * Math.PI/180 )			// rotate by 90 degrees - zeeman about x axis
-			v0 = v0.add( new THREE.Vector3( 0, 0, $scope.params.zeeman)).normalize ();
+			v0 = v0.add( new THREE.Vector3(0.1*$scope.params.zeemanX, 0.1*$scope.params.zeemanY, 0.1*$scope.params.zeemanZ)).normalize ();
 
 
 			// introduce squashing to represent surface effects
